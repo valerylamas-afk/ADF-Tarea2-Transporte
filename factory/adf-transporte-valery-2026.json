@@ -1,0 +1,10 @@
+{
+	"name": "adf-transporte-valery-2026",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastus"
+}
