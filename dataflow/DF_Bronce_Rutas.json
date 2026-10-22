@@ -37,6 +37,9 @@
 			"transformations": [
 				{
 					"name": "SelectRutasSQL"
+				},
+				{
+					"name": "SelectRutasCSV"
 				}
 			],
 			"scriptLines": [
@@ -107,7 +110,18 @@
 				"          Estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectRutasSQL"
+				"     skipDuplicateMapOutputs: true) ~> SelectRutasSQL",
+				"RutasCSV select(mapColumn(",
+				"          CodigoRuta = cod_ruta,",
+				"          NombreRuta = nombre_ruta,",
+				"          Origen = origen,",
+				"          Destino = destino,",
+				"          VigenciaDesde = fecha_desde,",
+				"          VigenciaHasta = fecha_hasta,",
+				"          Estado = estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV"
 			]
 		}
 	}
