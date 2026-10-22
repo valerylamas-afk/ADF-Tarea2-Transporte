@@ -150,7 +150,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV",
-				"SelectRutasCSV derive(AnioFuente = right(trim(VigenciaDesde), 4)) ~> DerivarAnioRutasCSV",
+				"SelectRutasCSV derive(AnioFuente = iif(     instr(VigenciaDesde, '/') > 0,     right(trim(VigenciaDesde), 4),     left(trim(VigenciaDesde), 4) )) ~> DerivarAnioRutasCSV",
 				"RutasExcel2022 select(mapColumn(",
 				"          CodigoRuta = cod_ruta,",
 				"          NombreRuta = nombre_ruta,",
