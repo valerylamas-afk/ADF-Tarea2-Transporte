@@ -43,6 +43,15 @@
 				},
 				{
 					"name": "SelectExcel2023"
+				},
+				{
+					"name": "SelectSQL"
+				},
+				{
+					"name": "UnionCSV2022"
+				},
+				{
+					"name": "UnionCSV2022y2023"
 				}
 			],
 			"scriptLines": [
@@ -119,10 +128,8 @@
 				"          HoraProgramada = hora_programada,",
 				"          HoraSalida = hora_salida,",
 				"          HoraLlegada = hora_llegada,",
-				"          PasajerosReportados = pasajeros_reportados,",
 				"          KmRecorridos = km_recorridos,",
-				"          EstadoViaje = estado_viaje,",
-				"          TipoMetrica = tipo_metrica",
+				"          EstadoViaje = estado_viaje",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectCSV",
@@ -151,7 +158,22 @@
 				"          EstadoViaje = estado_viaje",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectExcel2023"
+				"     skipDuplicateMapOutputs: true) ~> SelectExcel2023",
+				"ViajesSQL select(mapColumn(",
+				"          ViajeId,",
+				"          RutaHistoricaId,",
+				"          VehiculoId,",
+				"          FechaServicio,",
+				"          HoraProgramada,",
+				"          HoraSalida,",
+				"          HoraLlegada,",
+				"          KmRecorridos,",
+				"          EstadoViaje",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectSQL",
+				"SelectCSV, SelectExcel2022 union(byName: true)~> UnionCSV2022",
+				"UnionCSV2022, SelectExcel2023 union(byName: true)~> UnionCSV2022y2023"
 			]
 		}
 	}
