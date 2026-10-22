@@ -40,6 +40,9 @@
 				},
 				{
 					"name": "SelectRutasCSV"
+				},
+				{
+					"name": "DerivarAnioRutasCSV"
 				}
 			],
 			"scriptLines": [
@@ -121,7 +124,8 @@
 				"          Estado = estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV"
+				"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV",
+				"SelectRutasCSV derive(AnioFuente = substring(VigenciaDesde, 6, 4)) ~> DerivarAnioRutasCSV"
 			]
 		}
 	}
