@@ -52,6 +52,9 @@
 				},
 				{
 					"name": "DerivarTiposParadasSQL"
+				},
+				{
+					"name": "UnionParadas2022"
 				}
 			],
 			"scriptLines": [
@@ -178,7 +181,8 @@
 				"          Latitud = toString(Latitud),",
 				"          Longitud = toString(Longitud),",
 				"          VigenciaDesde = toString(VigenciaDesde),",
-				"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposParadasSQL"
+				"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposParadasSQL",
+				"SelectParadasCSV, SelectParadasExcel2022 union(byName: true)~> UnionParadas2022"
 			]
 		}
 	}
