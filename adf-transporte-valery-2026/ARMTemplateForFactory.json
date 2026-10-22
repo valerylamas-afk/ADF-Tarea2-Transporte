@@ -55,7 +55,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Data flow1",
+						"name": "Ejecutar_Bronze_Viajes",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
