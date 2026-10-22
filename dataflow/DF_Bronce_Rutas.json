@@ -104,7 +104,7 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> RutasExcel2023",
 				"source(output(",
-				"          AnioFuente as integer,",
+				"          AnioFuente as string,",
 				"          RutaHistoricaId as string,",
 				"          CodigoRuta as string,",
 				"          NombreRuta as string,",
