@@ -49,6 +49,9 @@
 				},
 				{
 					"name": "DerivarAnioRutas2022"
+				},
+				{
+					"name": "SelectRutasExcel2023"
 				}
 			],
 			"scriptLines": [
@@ -143,7 +146,22 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2022",
-				"SelectRutasExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioRutas2022"
+				"SelectRutasExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioRutas2022",
+				"RutasExcel2023 select(mapColumn(",
+				"          id_viaje,",
+				"          cod_ruta,",
+				"          nro_bus,",
+				"          fecha_servicio,",
+				"          hora_programada,",
+				"          hora_salida,",
+				"          hora_llegada,",
+				"          pasajeros_estimados,",
+				"          km_recorridos,",
+				"          estado_viaje,",
+				"          tipo_metrica",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2023"
 			]
 		}
 	}
