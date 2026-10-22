@@ -10,6 +10,9 @@
 						"type": "DatasetReference"
 					},
 					"name": "ParadasCSV"
+				},
+				{
+					"name": "ParadasExcel2022"
 				}
 			],
 			"sinks": [],
@@ -32,6 +35,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> ParadasCSV",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> ParadasExcel2022",
 				"ParadasCSV select(mapColumn(",
 				"          CodigoPublicado = nro_parada,",
 				"          NombreParada = nombre_parada,",
