@@ -19,35 +19,35 @@
 		},
 		"schema": [
 			{
-				"name": "Prop_0",
+				"name": "nro_parada",
 				"type": "String"
 			},
 			{
-				"name": "Prop_1",
+				"name": "nombre_parada",
 				"type": "String"
 			},
 			{
-				"name": "Prop_2",
+				"name": "zona",
 				"type": "String"
 			},
 			{
-				"name": "Prop_3",
+				"name": "latitud",
 				"type": "String"
 			},
 			{
-				"name": "Prop_4",
+				"name": "longitud",
 				"type": "String"
 			},
 			{
-				"name": "Prop_5",
+				"name": "fecha_desde",
 				"type": "String"
 			},
 			{
-				"name": "Prop_6",
+				"name": "fecha_hasta",
 				"type": "String"
 			},
 			{
-				"name": "Prop_7",
+				"name": "estado",
 				"type": "String"
 			}
 		]

@@ -19,6 +19,10 @@
 					"name": "ParadasExcel2022"
 				},
 				{
+					"dataset": {
+						"referenceName": "DS_Excel_Paradas2023",
+						"type": "DatasetReference"
+					},
 					"name": "ParadasExcel2023"
 				}
 			],
@@ -29,6 +33,9 @@
 				},
 				{
 					"name": "SelectParadasExcel2022"
+				},
+				{
+					"name": "SelectParadasExcel2023"
 				}
 			],
 			"scriptLines": [
@@ -58,8 +65,19 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> ParadasExcel2022",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> ParadasExcel2023",
+				"source(output(",
+				"          nro_parada as string,",
+				"          nombre_parada as string,",
+				"          zona as string,",
+				"          latitud as string,",
+				"          longitud as string,",
+				"          fecha_desde as string,",
+				"          fecha_hasta as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ParadasExcel2023",
 				"ParadasCSV select(mapColumn(",
 				"          CodigoPublicado = nro_parada,",
 				"          NombreParada = nombre_parada,",
@@ -83,7 +101,19 @@
 				"          Estado = estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2022"
+				"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2022",
+				"ParadasExcel2023 select(mapColumn(",
+				"          Prop_0,",
+				"          Prop_1,",
+				"          Prop_2,",
+				"          Prop_3,",
+				"          Prop_4,",
+				"          Prop_5,",
+				"          Prop_6,",
+				"          Prop_7",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2023"
 			]
 		}
 	}
