@@ -55,6 +55,9 @@
 				},
 				{
 					"name": "DerivarAnioRutas2023"
+				},
+				{
+					"name": "UnionRutas2022"
 				}
 			],
 			"scriptLines": [
@@ -157,7 +160,8 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2023",
-				"SelectRutasExcel2023 derive(AnioFuente = '2023') ~> DerivarAnioRutas2023"
+				"SelectRutasExcel2023 derive(AnioFuente = '2023') ~> DerivarAnioRutas2023",
+				"DerivarAnioRutasCSV, DerivarAnioRutas2022 union(byName: true)~> UnionRutas2022"
 			]
 		}
 	}
