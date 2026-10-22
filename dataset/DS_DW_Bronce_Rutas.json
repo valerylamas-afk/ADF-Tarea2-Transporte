@@ -1,0 +1,53 @@
+{
+	"name": "DS_DW_Bronce_Rutas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_DW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AnioFuente",
+				"type": "varchar"
+			},
+			{
+				"name": "RutaHistoricaId",
+				"type": "varchar"
+			},
+			{
+				"name": "CodigoRuta",
+				"type": "varchar"
+			},
+			{
+				"name": "NombreRuta",
+				"type": "varchar"
+			},
+			{
+				"name": "Origen",
+				"type": "varchar"
+			},
+			{
+				"name": "Destino",
+				"type": "varchar"
+			},
+			{
+				"name": "VigenciaDesde",
+				"type": "varchar"
+			},
+			{
+				"name": "VigenciaHasta",
+				"type": "varchar"
+			},
+			{
+				"name": "Estado",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "bronze",
+			"table": "RutasAzure"
+		}
+	}
+}
