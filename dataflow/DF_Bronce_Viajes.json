@@ -63,6 +63,12 @@
 				},
 				{
 					"name": "UnionBronceViajes"
+				},
+				{
+					"name": "DerivarAnioCSV"
+				},
+				{
+					"name": "DerivarAnioExcel2022"
 				}
 			],
 			"scriptLines": [
@@ -183,9 +189,11 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectSQL",
-				"SelectCSV, SelectExcel2022 union(byName: true)~> UnionCSV2022",
+				"DerivarAnioCSV, DerivarAnioExcel2022 union(byName: true)~> UnionCSV2022",
 				"UnionCSV2022, SelectExcel2023 union(byName: true)~> UnionCSV2022y2023",
 				"UnionCSV2022y2023, SelectSQL union(byName: true)~> UnionBronceViajes",
+				"SelectCSV derive(AnioFuente = substring(FechaServicio, 6, 4)) ~> DerivarAnioCSV",
+				"SelectExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioExcel2022",
 				"UnionBronceViajes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
