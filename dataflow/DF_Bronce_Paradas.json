@@ -1,0 +1,19 @@
+{
+	"name": "DF_Bronce_Paradas",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "ParadasCSV"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> ParadasCSV"
+			]
+		}
+	}
+}
