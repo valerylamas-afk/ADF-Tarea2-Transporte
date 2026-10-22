@@ -33,7 +33,15 @@
 					"name": "ViajesSQL"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Bronce_Viajes",
+						"type": "DatasetReference"
+					},
+					"name": "SinkBronceViajes"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectCSV"
@@ -177,7 +185,41 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectSQL",
 				"SelectCSV, SelectExcel2022 union(byName: true)~> UnionCSV2022",
 				"UnionCSV2022, SelectExcel2023 union(byName: true)~> UnionCSV2022y2023",
-				"UnionCSV2022y2023, SelectSQL union(byName: true)~> UnionBronceViajes"
+				"UnionCSV2022y2023, SelectSQL union(byName: true)~> UnionBronceViajes",
+				"UnionBronceViajes sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          AnioFuente as string,",
+				"          ViajeId as string,",
+				"          RutaHistoricaId as string,",
+				"          VehiculoId as string,",
+				"          FechaServicio as string,",
+				"          HoraProgramada as string,",
+				"          HoraSalida as string,",
+				"          HoraLlegada as string,",
+				"          ValidacionesTarjeta as string,",
+				"          KmRecorridos as string,",
+				"          EstadoViaje as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ViajeId,",
+				"          RutaHistoricaId,",
+				"          VehiculoId,",
+				"          FechaServicio,",
+				"          HoraProgramada,",
+				"          HoraSalida,",
+				"          HoraLlegada,",
+				"          KmRecorridos,",
+				"          EstadoViaje",
+				"     )) ~> SinkBronceViajes"
 			]
 		}
 	}
