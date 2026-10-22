@@ -43,6 +43,12 @@
 				},
 				{
 					"name": "DerivarAnioRutasCSV"
+				},
+				{
+					"name": "SelectRutasExcel2022"
+				},
+				{
+					"name": "DerivarAnioRutas2022"
 				}
 			],
 			"scriptLines": [
@@ -125,7 +131,19 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV",
-				"SelectRutasCSV derive(AnioFuente = substring(VigenciaDesde, 6, 4)) ~> DerivarAnioRutasCSV"
+				"SelectRutasCSV derive(AnioFuente = substring(VigenciaDesde, 6, 4)) ~> DerivarAnioRutasCSV",
+				"RutasExcel2022 select(mapColumn(",
+				"          CodigoRuta = cod_ruta,",
+				"          NombreRuta = nombre_ruta,",
+				"          Origen = origen,",
+				"          Destino = destino,",
+				"          VigenciaDesde = fecha_desde,",
+				"          VigenciaHasta = fecha_hasta,",
+				"          Estado = estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2022",
+				"SelectRutasExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioRutas2022"
 			]
 		}
 	}
