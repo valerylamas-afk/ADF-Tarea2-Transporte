@@ -69,6 +69,9 @@
 				},
 				{
 					"name": "DerivarAnioExcel2022"
+				},
+				{
+					"name": "DerivarAnioExcel2023"
 				}
 			],
 			"scriptLines": [
@@ -190,10 +193,11 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectSQL",
 				"DerivarAnioCSV, DerivarAnioExcel2022 union(byName: true)~> UnionCSV2022",
-				"UnionCSV2022, SelectExcel2023 union(byName: true)~> UnionCSV2022y2023",
+				"UnionCSV2022, DerivarAnioExcel2023 union(byName: true)~> UnionCSV2022y2023",
 				"UnionCSV2022y2023, SelectSQL union(byName: true)~> UnionBronceViajes",
 				"SelectCSV derive(AnioFuente = substring(FechaServicio, 6, 4)) ~> DerivarAnioCSV",
 				"SelectExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioExcel2022",
+				"SelectExcel2023 derive(AnioFuente = '2023') ~> DerivarAnioExcel2023",
 				"UnionBronceViajes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
