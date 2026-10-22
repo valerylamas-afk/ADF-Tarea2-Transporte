@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-transporte-valery-2026"
+		},
+		"LS_AzureBlobStorage_connectionString": {
+			"value": ""
+		},
+		"LS_AzureSQL_DW_password": {
+			"value": ""
+		},
+		"LS_AzureSQL_ERP_password": {
+			"value": ""
+		},
+		"LS_AzureSQL_DW_properties_typeProperties_server": {
+			"value": "sql-transporte-valery-2026-cus.database.windows.net"
+		},
+		"LS_AzureSQL_DW_properties_typeProperties_database": {
+			"value": "dw_transporte"
+		},
+		"LS_AzureSQL_DW_properties_typeProperties_userName": {
+			"value": "admintransporte"
+		},
+		"LS_AzureSQL_ERP_properties_typeProperties_server": {
+			"value": "sql-transporte-valery-2026-cus.database.windows.net"
+		},
+		"LS_AzureSQL_ERP_properties_typeProperties_database": {
+			"value": "erp_transporte_db"
+		},
+		"LS_AzureSQL_ERP_properties_typeProperties_userName": {
+			"value": "admintransporte"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

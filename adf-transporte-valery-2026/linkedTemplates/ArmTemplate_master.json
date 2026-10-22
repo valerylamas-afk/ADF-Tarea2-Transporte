@@ -1,0 +1,105 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adf-transporte-valery-2026"
+		},
+		"LS_AzureBlobStorage_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"LS_AzureBlobStorage\""
+		},
+		"LS_AzureSQL_DW_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"LS_AzureSQL_DW\""
+		},
+		"LS_AzureSQL_ERP_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"LS_AzureSQL_ERP\""
+		},
+		"LS_AzureSQL_DW_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-transporte-valery-2026-cus.database.windows.net"
+		},
+		"LS_AzureSQL_DW_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dw_transporte"
+		},
+		"LS_AzureSQL_DW_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "admintransporte"
+		},
+		"LS_AzureSQL_ERP_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-transporte-valery-2026-cus.database.windows.net"
+		},
+		"LS_AzureSQL_ERP_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "erp_transporte_db"
+		},
+		"LS_AzureSQL_ERP_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "admintransporte"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Token de SAS para la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adf-transporte-valery-2026_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2024-03-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_AzureBlobStorage_connectionString": {
+						"value": "[parameters('LS_AzureBlobStorage_connectionString')]"
+					},
+					"LS_AzureSQL_DW_password": {
+						"value": "[parameters('LS_AzureSQL_DW_password')]"
+					},
+					"LS_AzureSQL_ERP_password": {
+						"value": "[parameters('LS_AzureSQL_ERP_password')]"
+					},
+					"LS_AzureSQL_DW_properties_typeProperties_server": {
+						"value": "[parameters('LS_AzureSQL_DW_properties_typeProperties_server')]"
+					},
+					"LS_AzureSQL_DW_properties_typeProperties_database": {
+						"value": "[parameters('LS_AzureSQL_DW_properties_typeProperties_database')]"
+					},
+					"LS_AzureSQL_DW_properties_typeProperties_userName": {
+						"value": "[parameters('LS_AzureSQL_DW_properties_typeProperties_userName')]"
+					},
+					"LS_AzureSQL_ERP_properties_typeProperties_server": {
+						"value": "[parameters('LS_AzureSQL_ERP_properties_typeProperties_server')]"
+					},
+					"LS_AzureSQL_ERP_properties_typeProperties_database": {
+						"value": "[parameters('LS_AzureSQL_ERP_properties_typeProperties_database')]"
+					},
+					"LS_AzureSQL_ERP_properties_typeProperties_userName": {
+						"value": "[parameters('LS_AzureSQL_ERP_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
