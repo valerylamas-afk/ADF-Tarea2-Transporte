@@ -19,27 +19,35 @@
 		},
 		"schema": [
 			{
+				"name": "nro_parada",
 				"type": "String"
 			},
 			{
+				"name": "nombre_parada",
 				"type": "String"
 			},
 			{
+				"name": "zona",
 				"type": "String"
 			},
 			{
+				"name": "latitud",
 				"type": "String"
 			},
 			{
+				"name": "longitud",
 				"type": "String"
 			},
 			{
+				"name": "fecha_desde",
 				"type": "String"
 			},
 			{
+				"name": "fecha_hasta",
 				"type": "String"
 			},
 			{
+				"name": "estado",
 				"type": "String"
 			}
 		]
