@@ -24,6 +24,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "ViajesExcel2023"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_Viajes_ERP",
+						"type": "DatasetReference"
+					},
+					"name": "ViajesSQL"
 				}
 			],
 			"sinks": [],
@@ -76,7 +83,24 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> ViajesExcel2023"
+				"     ignoreNoFilesFound: false) ~> ViajesExcel2023",
+				"source(output(",
+				"          AnioFuente as string,",
+				"          ViajeId as string,",
+				"          RutaHistoricaId as string,",
+				"          VehiculoId as string,",
+				"          FechaServicio as string,",
+				"          HoraProgramada as string,",
+				"          HoraSalida as string,",
+				"          HoraLlegada as string,",
+				"          ValidacionesTarjeta as string,",
+				"          KmRecorridos as string,",
+				"          EstadoViaje as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> ViajesSQL"
 			]
 		}
 	}
