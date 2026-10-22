@@ -34,7 +34,17 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SelectCSV"
+				},
+				{
+					"name": "SelectExcel2022"
+				},
+				{
+					"name": "SelectExcel2023"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id_viaje as string,",
@@ -100,7 +110,48 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> ViajesSQL"
+				"     format: 'table') ~> ViajesSQL",
+				"ViajesCSV select(mapColumn(",
+				"          ViajeId = id_viaje,",
+				"          RutaHistoricaId = cod_ruta,",
+				"          VehiculoId = nro_bus,",
+				"          FechaServicio = fec_servicio,",
+				"          HoraProgramada = hora_programada,",
+				"          HoraSalida = hora_salida,",
+				"          HoraLlegada = hora_llegada,",
+				"          PasajerosReportados = pasajeros_reportados,",
+				"          KmRecorridos = km_recorridos,",
+				"          EstadoViaje = estado_viaje,",
+				"          TipoMetrica = tipo_metrica",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectCSV",
+				"ViajesExcel2022 select(mapColumn(",
+				"          ViajeId = id_viaje,",
+				"          RutaHistoricaId = cod_ruta,",
+				"          VehiculoId = nro_bus,",
+				"          FechaServicio = fecha_servicio,",
+				"          HoraProgramada = hora_programada,",
+				"          HoraSalida = hora_salida,",
+				"          HoraLlegada = hora_llegada,",
+				"          KmRecorridos = km_recorridos,",
+				"          EstadoViaje = estado_viaje",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectExcel2022",
+				"ViajesExcel2023 select(mapColumn(",
+				"          ViajeId = id_viaje,",
+				"          RutaHistoricaId = cod_ruta,",
+				"          VehiculoId = nro_bus,",
+				"          FechaServicio = fecha_servicio,",
+				"          HoraProgramada = hora_programada,",
+				"          HoraSalida = hora_salida,",
+				"          HoraLlegada = hora_llegada,",
+				"          KmRecorridos = km_recorridos,",
+				"          EstadoViaje = estado_viaje",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectExcel2023"
 			]
 		}
 	}
