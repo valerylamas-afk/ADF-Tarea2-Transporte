@@ -1,0 +1,51 @@
+{
+	"name": "DS_Excel_Rutas2022",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Rutas",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "operacion_2022.xlsx",
+				"folderPath": "datos_xls",
+				"container": "raw"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "cod_ruta",
+				"type": "String"
+			},
+			{
+				"name": "nombre_ruta",
+				"type": "String"
+			},
+			{
+				"name": "origen",
+				"type": "String"
+			},
+			{
+				"name": "destino",
+				"type": "String"
+			},
+			{
+				"name": "fecha_desde",
+				"type": "String"
+			},
+			{
+				"name": "fecha_hasta",
+				"type": "String"
+			},
+			{
+				"name": "estado",
+				"type": "String"
+			}
+		]
+	}
+}
