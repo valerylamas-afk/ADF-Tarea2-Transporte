@@ -1,0 +1,83 @@
+{
+	"name": "DF_Bronce_Viajes",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_CSV_Viajes",
+						"type": "DatasetReference"
+					},
+					"name": "ViajesCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Excel_Operacion2022",
+						"type": "DatasetReference"
+					},
+					"name": "ViajesExcel2022"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Excel_Operacion2023",
+						"type": "DatasetReference"
+					},
+					"name": "ViajesExcel2023"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id_viaje as string,",
+				"          cod_ruta as string,",
+				"          nro_bus as string,",
+				"          fec_servicio as string,",
+				"          hora_programada as string,",
+				"          hora_salida as string,",
+				"          hora_llegada as string,",
+				"          pasajeros_reportados as string,",
+				"          km_recorridos as string,",
+				"          estado_viaje as string,",
+				"          tipo_metrica as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ViajesCSV",
+				"source(output(",
+				"          id_viaje as string,",
+				"          cod_ruta as string,",
+				"          nro_bus as string,",
+				"          fecha_servicio as string,",
+				"          hora_programada as string,",
+				"          hora_salida as string,",
+				"          hora_llegada as string,",
+				"          pasajeros_estimados as string,",
+				"          km_recorridos as string,",
+				"          estado_viaje as string,",
+				"          tipo_metrica as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ViajesExcel2022",
+				"source(output(",
+				"          id_viaje as string,",
+				"          cod_ruta as string,",
+				"          nro_bus as string,",
+				"          fecha_servicio as string,",
+				"          hora_programada as string,",
+				"          hora_salida as string,",
+				"          hora_llegada as string,",
+				"          pasajeros_estimados as string,",
+				"          km_recorridos as string,",
+				"          estado_viaje as string,",
+				"          tipo_metrica as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> ViajesExcel2023"
+			]
+		}
+	}
+}
