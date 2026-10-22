@@ -86,6 +86,39 @@
 							},
 							"traceLevel": "Fine"
 						}
+					},
+					{
+						"name": "Ejecutar_Bronze_Rutas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Rutas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"RutasCSV": {},
+									"RutasExcel2022": {},
+									"RutasExcel2023": {},
+									"RutasSQL": {},
+									"SinkBronceRutas": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
 					}
 				],
 				"policy": {
@@ -94,7 +127,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Viajes')]"
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Viajes')]",
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Rutas')]"
 			]
 		},
 		{
@@ -758,6 +792,566 @@
 				"[concat(variables('factoryId'), '/datasets/DS_Excel_Operacion2023')]",
 				"[concat(variables('factoryId'), '/datasets/DS_SQL_Viajes_ERP')]",
 				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Viajes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "rutas.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nombre_ruta",
+						"type": "String"
+					},
+					{
+						"name": "origen",
+						"type": "String"
+					},
+					{
+						"name": "destino",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2022')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Rutas",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2022.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nombre_ruta",
+						"type": "String"
+					},
+					{
+						"name": "origen",
+						"type": "String"
+					},
+					{
+						"name": "destino",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2023')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Rutas",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2023.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nombre_ruta",
+						"type": "String"
+					},
+					{
+						"name": "origen",
+						"type": "String"
+					},
+					{
+						"name": "destino",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_Rutas_ERP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_ERP",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CodigoRuta",
+						"type": "nvarchar"
+					},
+					{
+						"name": "NombreRuta",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Origen",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Destino",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "RutasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_Rutas",
+								"type": "DatasetReference"
+							},
+							"name": "RutasCSV"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Rutas2022",
+								"type": "DatasetReference"
+							},
+							"name": "RutasExcel2022"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Rutas2022",
+								"type": "DatasetReference"
+							},
+							"name": "RutasExcel2023"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_Rutas_ERP",
+								"type": "DatasetReference"
+							},
+							"name": "RutasSQL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Rutas",
+								"type": "DatasetReference"
+							},
+							"name": "SinkBronceRutas"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectRutasSQL"
+						},
+						{
+							"name": "SelectRutasCSV"
+						},
+						{
+							"name": "DerivarAnioRutasCSV"
+						},
+						{
+							"name": "SelectRutasExcel2022"
+						},
+						{
+							"name": "DerivarAnioRutas2022"
+						},
+						{
+							"name": "SelectRutasExcel2023"
+						},
+						{
+							"name": "DerivarAnioRutas2023"
+						},
+						{
+							"name": "UnionRutas2022"
+						},
+						{
+							"name": "UnionRutas2023"
+						},
+						{
+							"name": "UnionBronceRutas"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          cod_ruta as string,",
+						"          nombre_ruta as string,",
+						"          origen as string,",
+						"          destino as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RutasCSV",
+						"source(output(",
+						"          cod_ruta as string,",
+						"          nombre_ruta as string,",
+						"          origen as string,",
+						"          destino as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RutasExcel2022",
+						"source(output(",
+						"          cod_ruta as string,",
+						"          nombre_ruta as string,",
+						"          origen as string,",
+						"          destino as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RutasExcel2023",
+						"source(output(",
+						"          AnioFuente as string,",
+						"          RutaHistoricaId as string,",
+						"          CodigoRuta as string,",
+						"          NombreRuta as string,",
+						"          Origen as string,",
+						"          Destino as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> RutasSQL",
+						"RutasSQL select(mapColumn(",
+						"          AnioFuente,",
+						"          RutaHistoricaId,",
+						"          CodigoRuta,",
+						"          NombreRuta,",
+						"          Origen,",
+						"          Destino,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasSQL",
+						"RutasCSV select(mapColumn(",
+						"          CodigoRuta = cod_ruta,",
+						"          NombreRuta = nombre_ruta,",
+						"          Origen = origen,",
+						"          Destino = destino,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV",
+						"SelectRutasCSV derive(AnioFuente = substring(VigenciaDesde, 6, 4)) ~> DerivarAnioRutasCSV",
+						"RutasExcel2022 select(mapColumn(",
+						"          CodigoRuta = cod_ruta,",
+						"          NombreRuta = nombre_ruta,",
+						"          Origen = origen,",
+						"          Destino = destino,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2022",
+						"SelectRutasExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioRutas2022",
+						"RutasExcel2023 select(mapColumn(",
+						"          CodigoRuta = cod_ruta,",
+						"          NombreRuta = nombre_ruta,",
+						"          Origen = origen,",
+						"          Destino = destino,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2023",
+						"SelectRutasExcel2023 derive(AnioFuente = '2023') ~> DerivarAnioRutas2023",
+						"DerivarAnioRutasCSV, DerivarAnioRutas2022 union(byName: true)~> UnionRutas2022",
+						"UnionRutas2022, DerivarAnioRutas2023 union(byName: true)~> UnionRutas2023",
+						"UnionRutas2023, SelectRutasSQL union(byName: true)~> UnionBronceRutas",
+						"UnionBronceRutas sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          AnioFuente as string,",
+						"          RutaHistoricaId as string,",
+						"          CodigoRuta as string,",
+						"          NombreRuta as string,",
+						"          Origen as string,",
+						"          Destino as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          AnioFuente,",
+						"          RutaHistoricaId,",
+						"          CodigoRuta,",
+						"          NombreRuta,",
+						"          Origen,",
+						"          Destino,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> SinkBronceRutas"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_CSV_Rutas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Rutas2022')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_Rutas_ERP')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Rutas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "varchar"
+					},
+					{
+						"name": "CodigoRuta",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreRuta",
+						"type": "varchar"
+					},
+					{
+						"name": "Origen",
+						"type": "varchar"
+					},
+					{
+						"name": "Destino",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "varchar"
+					},
+					{
+						"name": "Estado",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "RutasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ejecutar_Bronze_Rutas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Rutas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"RutasCSV": {},
+									"RutasExcel2022": {},
+									"RutasExcel2023": {},
+									"RutasSQL": {},
+									"SinkBronceRutas": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Rutas')]"
 			]
 		}
 	]
