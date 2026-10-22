@@ -26,6 +26,10 @@
 					"name": "ParadasExcel2023"
 				},
 				{
+					"dataset": {
+						"referenceName": "DS_SQL_Paradas_ERP",
+						"type": "DatasetReference"
+					},
 					"name": "ParadasSQL"
 				}
 			],
@@ -39,6 +43,15 @@
 				},
 				{
 					"name": "SelectParadasExcel2023"
+				},
+				{
+					"name": "ConvertirTiposParadasSQL"
+				},
+				{
+					"name": "SelectParadasSQL"
+				},
+				{
+					"name": "DerivarTiposParadasSQL"
 				}
 			],
 			"scriptLines": [
@@ -81,8 +94,22 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> ParadasExcel2023",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> ParadasSQL",
+				"source(output(",
+				"          AnioFuente as integer,",
+				"          ParadaHistoricaId as string,",
+				"          CodigoPublicado as string,",
+				"          NombreParada as string,",
+				"          Zona as string,",
+				"          Latitud as decimal(9,6),",
+				"          Longitud as decimal(9,6),",
+				"          VigenciaDesde as date,",
+				"          VigenciaHasta as date,",
+				"          Estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> ParadasSQL",
 				"ParadasCSV select(mapColumn(",
 				"          CodigoPublicado = nro_parada,",
 				"          NombreParada = nombre_parada,",
@@ -118,7 +145,40 @@
 				"          Estado = estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2023"
+				"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2023",
+				"ParadasSQL select(mapColumn(",
+				"          AnioFuente,",
+				"          ParadaHistoricaId,",
+				"          CodigoPublicado,",
+				"          NombreParada,",
+				"          Zona,",
+				"          Latitud,",
+				"          Longitud,",
+				"          VigenciaDesde,",
+				"          VigenciaHasta,",
+				"          Estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> ConvertirTiposParadasSQL",
+				"ConvertirTiposParadasSQL select(mapColumn(",
+				"          AnioFuente,",
+				"          ParadaHistoricaId,",
+				"          CodigoPublicado,",
+				"          NombreParada,",
+				"          Zona,",
+				"          Latitud,",
+				"          Longitud,",
+				"          VigenciaDesde,",
+				"          VigenciaHasta,",
+				"          Estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectParadasSQL",
+				"SelectParadasSQL derive(AnioFuente = toString(AnioFuente),",
+				"          Latitud = toString(Latitud),",
+				"          Longitud = toString(Longitud),",
+				"          VigenciaDesde = toString(VigenciaDesde),",
+				"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposParadasSQL"
 			]
 		}
 	}
