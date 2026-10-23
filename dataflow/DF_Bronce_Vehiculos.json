@@ -10,6 +10,16 @@
 						"type": "DatasetReference"
 					},
 					"name": "VehiculosCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Excel_Vehiculos2022",
+						"type": "DatasetReference"
+					},
+					"name": "VehiculosExcel2022"
+				},
+				{
+					"name": "VehiculosExcel2023"
 				}
 			],
 			"sinks": [],
@@ -31,6 +41,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> VehiculosCSV",
+				"source(output(",
+				"          nro_bus as string,",
+				"          placa as string,",
+				"          tipo_bus as string,",
+				"          capacidad as string,",
+				"          fecha_desde as string,",
+				"          fecha_hasta as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> VehiculosExcel2022",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> VehiculosExcel2023",
 				"VehiculosCSV select(mapColumn(",
 				"          VehiculoId = nro_bus,",
 				"          Placa = placa,",

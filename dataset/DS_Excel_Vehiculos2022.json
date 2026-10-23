@@ -1,0 +1,51 @@
+{
+	"name": "DS_Excel_Vehiculos2022",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Vehiculos",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "operacion_2022.xlsx",
+				"folderPath": "datos_xls",
+				"container": "raw"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "nro_bus",
+				"type": "String"
+			},
+			{
+				"name": "placa",
+				"type": "String"
+			},
+			{
+				"name": "tipo_bus",
+				"type": "String"
+			},
+			{
+				"name": "capacidad",
+				"type": "String"
+			},
+			{
+				"name": "fecha_desde",
+				"type": "String"
+			},
+			{
+				"name": "fecha_hasta",
+				"type": "String"
+			},
+			{
+				"name": "estado",
+				"type": "String"
+			}
+		]
+	}
+}
