@@ -24,6 +24,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "VehiculosExcel2023"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_Vehiculos_ERP",
+						"type": "DatasetReference"
+					},
+					"name": "VehiculosSQL"
 				}
 			],
 			"sinks": [],
@@ -33,6 +40,12 @@
 				},
 				{
 					"name": "SelectVehiculosExcel2023"
+				},
+				{
+					"name": "SelectVehiculosSQL"
+				},
+				{
+					"name": "DerivarTiposVehiculosSQL"
 				}
 			],
 			"scriptLines": [
@@ -72,6 +85,20 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> VehiculosExcel2023",
+				"source(output(",
+				"          AnioFuente as integer,",
+				"          VehiculoId as string,",
+				"          Placa as string,",
+				"          TipoVehiculo as string,",
+				"          CapacidadEfectiva as integer,",
+				"          VigenciaDesde as date,",
+				"          VigenciaHasta as date,",
+				"          Estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> VehiculosSQL",
 				"VehiculosCSV select(mapColumn(",
 				"          VehiculoId = nro_bus,",
 				"          Placa = placa,",
@@ -93,7 +120,23 @@
 				"          Estado = estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2023"
+				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2023",
+				"VehiculosSQL select(mapColumn(",
+				"          AnioFuente,",
+				"          VehiculoId,",
+				"          Placa,",
+				"          TipoVehiculo,",
+				"          CapacidadEfectiva,",
+				"          VigenciaDesde,",
+				"          VigenciaHasta,",
+				"          Estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosSQL",
+				"SelectVehiculosSQL derive(AnioFuente = toString(AnioFuente),",
+				"          CapacidadEfectiva = toString(CapacidadEfectiva),",
+				"          VigenciaDesde = toString(VigenciaDesde),",
+				"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposVehiculosSQL"
 			]
 		}
 	}
