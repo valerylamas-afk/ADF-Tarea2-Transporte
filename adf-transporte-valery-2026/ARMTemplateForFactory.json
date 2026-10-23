@@ -1961,6 +1961,551 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Paradas')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosCSV"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Vehiculos2022",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosExcel2022"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Vehiculos2023",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosExcel2023"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_Vehiculos_ERP",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosSQL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "SinkBronceVehiculos"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectVehiculosCSV"
+						},
+						{
+							"name": "SelectVehiculosExcel2023"
+						},
+						{
+							"name": "SelectVehiculosSQL"
+						},
+						{
+							"name": "DerivarTiposVehiculosSQL"
+						},
+						{
+							"name": "UnionVehiculosExcel2023B"
+						},
+						{
+							"name": "SelectVehiculosExcel2022"
+						},
+						{
+							"name": "UnionVehiculosCSV2022A"
+						},
+						{
+							"name": "UnionBronceVehiculos"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          nro_bus as string,",
+						"          placa as string,",
+						"          tipo_bus as string,",
+						"          capacidad as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VehiculosCSV",
+						"source(output(",
+						"          nro_bus as string,",
+						"          placa as string,",
+						"          tipo_bus as string,",
+						"          capacidad as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VehiculosExcel2022",
+						"source(output(",
+						"          nro_bus as string,",
+						"          placa as string,",
+						"          tipo_bus as string,",
+						"          capacidad as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VehiculosExcel2023",
+						"source(output(",
+						"          AnioFuente as integer,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as integer,",
+						"          VigenciaDesde as date,",
+						"          VigenciaHasta as date,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> VehiculosSQL",
+						"VehiculosCSV select(mapColumn(",
+						"          VehiculoId = nro_bus,",
+						"          Placa = placa,",
+						"          TipoVehiculo = tipo_bus,",
+						"          CapacidadEfectiva = capacidad,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosCSV",
+						"VehiculosExcel2023 select(mapColumn(",
+						"          VehiculoId = nro_bus,",
+						"          Placa = placa,",
+						"          TipoVehiculo = tipo_bus,",
+						"          CapacidadEfectiva = capacidad,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2023",
+						"VehiculosSQL select(mapColumn(",
+						"          AnioFuente,",
+						"          VehiculoId,",
+						"          Placa,",
+						"          TipoVehiculo,",
+						"          CapacidadEfectiva,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosSQL",
+						"SelectVehiculosSQL derive(AnioFuente = toString(AnioFuente),",
+						"          CapacidadEfectiva = toString(CapacidadEfectiva),",
+						"          VigenciaDesde = toString(VigenciaDesde),",
+						"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposVehiculosSQL",
+						"UnionVehiculosCSV2022A, SelectVehiculosExcel2023 union(byName: true)~> UnionVehiculosExcel2023B",
+						"VehiculosExcel2022 select(mapColumn(",
+						"          VehiculoId = nro_bus,",
+						"          Placa = placa,",
+						"          TipoVehiculo = tipo_bus,",
+						"          CapacidadEfectiva = capacidad,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022",
+						"SelectVehiculosCSV, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosCSV2022A",
+						"UnionVehiculosExcel2023B, DerivarTiposVehiculosSQL union(byName: true)~> UnionBronceVehiculos",
+						"UnionBronceVehiculos sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          AnioFuente as string,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          AnioFuente,",
+						"          VehiculoId,",
+						"          Placa,",
+						"          TipoVehiculo,",
+						"          CapacidadEfectiva,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> SinkBronceVehiculos"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_CSV_Vehiculos')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Vehiculos2022')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Vehiculos2023')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_Vehiculos_ERP')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Vehiculos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "vehiculos.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "nro_bus",
+						"type": "String"
+					},
+					{
+						"name": "placa",
+						"type": "String"
+					},
+					{
+						"name": "tipo_bus",
+						"type": "String"
+					},
+					{
+						"name": "capacidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2022')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Vehiculos",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2022.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nro_bus",
+						"type": "String"
+					},
+					{
+						"name": "placa",
+						"type": "String"
+					},
+					{
+						"name": "tipo_bus",
+						"type": "String"
+					},
+					{
+						"name": "capacidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2023')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Vehiculos",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2023.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nro_bus",
+						"type": "String"
+					},
+					{
+						"name": "placa",
+						"type": "String"
+					},
+					{
+						"name": "tipo_bus",
+						"type": "String"
+					},
+					{
+						"name": "capacidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_Vehiculos_ERP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_ERP",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Placa",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TipoVehiculo",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CapacidadEfectiva",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "VehiculosAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "VehiculoId",
+						"type": "varchar"
+					},
+					{
+						"name": "Placa",
+						"type": "varchar"
+					},
+					{
+						"name": "TipoVehiculo",
+						"type": "varchar"
+					},
+					{
+						"name": "CapacidadEfectiva",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "varchar"
+					},
+					{
+						"name": "Estado",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "VehiculosAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ejecutar_Bronze_Vehiculos",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Vehiculos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VehiculosCSV": {},
+									"VehiculosExcel2022": {},
+									"VehiculosExcel2023": {},
+									"VehiculosSQL": {},
+									"SinkBronceVehiculos": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Vehiculos')]"
+			]
 		}
 	]
 }
