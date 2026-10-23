@@ -49,7 +49,7 @@
 				"          TipoVehiculo = upper(trim(TipoVehiculo)),",
 				"          Estado = upper(trim(Estado))) ~> LimpiarTextoVehiculos",
 				"LimpiarTextoVehiculos derive(CapacidadEfectiva = toInteger(trim(CapacidadEfectiva)),",
-				"          VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
+				"          VigenciaDesde = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) ),",
 				"          VigenciaHasta = iif(     instr(trim(VigenciaHasta), '/') > 0,     toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),     toDate(trim(VigenciaHasta), 'yyyy-MM-dd') )) ~> ConvertirDatosVehiculos",
 				"ConvertirDatosVehiculos sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
