@@ -48,10 +48,13 @@
 					"name": "DerivarTiposVehiculosSQL"
 				},
 				{
-					"name": "UnionVehiculos2022"
+					"name": "UnionVehiculos2023"
 				},
 				{
 					"name": "SelectVehiculosExcel2022"
+				},
+				{
+					"name": "UnionVehiculos2022"
 				}
 			],
 			"scriptLines": [
@@ -143,7 +146,7 @@
 				"          CapacidadEfectiva = toString(CapacidadEfectiva),",
 				"          VigenciaDesde = toString(VigenciaDesde),",
 				"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposVehiculosSQL",
-				"SelectVehiculosCSV union(byName: true)~> UnionVehiculos2022",
+				"UnionVehiculos2022, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculos2023",
 				"VehiculosExcel2022 select(mapColumn(",
 				"          nro_bus,",
 				"          placa,",
@@ -154,7 +157,8 @@
 				"          estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022"
+				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022",
+				"SelectVehiculosCSV union(byName: true)~> UnionVehiculos2022"
 			]
 		}
 	}
