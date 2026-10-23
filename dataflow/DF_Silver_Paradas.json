@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "LimpiarTextoParadas"
+				},
+				{
+					"name": "ConvertirDatosParadas"
 				}
 			],
 			"scriptLines": [
@@ -38,7 +41,10 @@
 				"ParadasBronze derive(ParadaHistoricaId = trim(ParadaHistoricaId),",
 				"          NombreParada = trim(NombreParada),",
 				"          Zona = upper(trim(Zona)),",
-				"          Estado = upper(trim(Estado))) ~> LimpiarTextoParadas"
+				"          Estado = upper(trim(Estado))) ~> LimpiarTextoParadas",
+				"LimpiarTextoParadas derive(Latitud = toDecimal(trim(Latitud), 10, 6),",
+				"          Longitud = toDecimal(trim(Longitud), 10, 6),",
+				"          VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),     toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) )) ~> ConvertirDatosParadas"
 			]
 		}
 	}
