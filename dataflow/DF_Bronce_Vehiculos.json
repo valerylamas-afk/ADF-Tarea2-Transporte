@@ -33,7 +33,15 @@
 					"name": "VehiculosSQL"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Bronce_Vehiculos",
+						"type": "DatasetReference"
+					},
+					"name": "SinkBronceVehiculos"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectVehiculosCSV"
@@ -55,6 +63,9 @@
 				},
 				{
 					"name": "UnionVehiculosCSV2022A"
+				},
+				{
+					"name": "UnionBronceVehiculos"
 				}
 			],
 			"scriptLines": [
@@ -158,7 +169,38 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022",
-				"SelectVehiculosCSV, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosCSV2022A"
+				"SelectVehiculosCSV, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosCSV2022A",
+				"UnionVehiculosExcel2023B, DerivarTiposVehiculosSQL union(byName: true)~> UnionBronceVehiculos",
+				"UnionBronceVehiculos sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          AnioFuente as string,",
+				"          VehiculoId as string,",
+				"          Placa as string,",
+				"          TipoVehiculo as string,",
+				"          CapacidadEfectiva as string,",
+				"          VigenciaDesde as string,",
+				"          VigenciaHasta as string,",
+				"          Estado as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AnioFuente,",
+				"          VehiculoId,",
+				"          Placa,",
+				"          TipoVehiculo,",
+				"          CapacidadEfectiva,",
+				"          VigenciaDesde,",
+				"          VigenciaHasta,",
+				"          Estado",
+				"     )) ~> SinkBronceVehiculos"
 			]
 		}
 	}
