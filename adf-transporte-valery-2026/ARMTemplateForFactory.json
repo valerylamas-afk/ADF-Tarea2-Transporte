@@ -132,6 +132,423 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Paradas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ejecutar_Bronze_Paradas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Paradas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"ParadasCSV": {},
+									"ParadasExcel2022": {},
+									"ParadasExcel2023": {},
+									"ParadasSQL": {},
+									"SinkBronceParadas": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Paradas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ejecutar_Bronze_Rutas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Rutas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"RutasCSV": {},
+									"RutasExcel2022": {},
+									"RutasExcel2023": {},
+									"RutasSQL": {},
+									"SinkBronceRutas": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Rutas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Ejecutar_Bronze_Vehiculos",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Vehiculos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VehiculosCSV": {},
+									"VehiculosExcel2022": {},
+									"VehiculosExcel2023": {},
+									"VehiculosSQL": {},
+									"SinkBronceVehiculos": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Vehiculos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarSilverVehiculos",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Silver_Vehiculos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VehiculosBronze": {},
+									"VehiculosSilver": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Vehiculos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_Paradas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarSilverParadas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Silver_Paradas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"ParadasBronze": {},
+									"ParadasSilver": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Paradas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_Paradas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "paradas.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "nro_parada",
+						"type": "String"
+					},
+					{
+						"name": "nombre_parada",
+						"type": "String"
+					},
+					{
+						"name": "zona",
+						"type": "String"
+					},
+					{
+						"name": "latitud",
+						"type": "String"
+					},
+					{
+						"name": "longitud",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "rutas.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nombre_ruta",
+						"type": "String"
+					},
+					{
+						"name": "origen",
+						"type": "String"
+					},
+					{
+						"name": "destino",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "vehiculos.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "nro_bus",
+						"type": "String"
+					},
+					{
+						"name": "placa",
+						"type": "String"
+					},
+					{
+						"name": "tipo_bus",
+						"type": "String"
+					},
+					{
+						"name": "capacidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_CSV_Viajes')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -206,6 +623,180 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Paradas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "ParadaHistoricaId",
+						"type": "varchar"
+					},
+					{
+						"name": "CodigoPublicado",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreParada",
+						"type": "varchar"
+					},
+					{
+						"name": "Zona",
+						"type": "varchar"
+					},
+					{
+						"name": "Latitud",
+						"type": "varchar"
+					},
+					{
+						"name": "Longitud",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "varchar"
+					},
+					{
+						"name": "Estado",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "ParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "varchar"
+					},
+					{
+						"name": "CodigoRuta",
+						"type": "varchar"
+					},
+					{
+						"name": "NombreRuta",
+						"type": "varchar"
+					},
+					{
+						"name": "Origen",
+						"type": "varchar"
+					},
+					{
+						"name": "Destino",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "varchar"
+					},
+					{
+						"name": "Estado",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "RutasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "VehiculoId",
+						"type": "varchar"
+					},
+					{
+						"name": "Placa",
+						"type": "varchar"
+					},
+					{
+						"name": "TipoVehiculo",
+						"type": "varchar"
+					},
+					{
+						"name": "CapacidadEfectiva",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "varchar"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "varchar"
+					},
+					{
+						"name": "Estado",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "VehiculosAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Viajes')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -265,6 +856,129 @@
 				"typeProperties": {
 					"schema": "bronze",
 					"table": "ViajesAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Paradas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "ParadaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CodigoPublicado",
+						"type": "nvarchar"
+					},
+					{
+						"name": "NombreParada",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Zona",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Latitud",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "Longitud",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "ParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Placa",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TipoVehiculo",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CapacidadEfectiva",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "VehiculosAzure"
 				}
 			},
 			"dependsOn": [
@@ -416,6 +1130,532 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Paradas2022')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Paradas",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2022.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nro_parada",
+						"type": "String"
+					},
+					{
+						"name": "nombre_parada",
+						"type": "String"
+					},
+					{
+						"name": "zona",
+						"type": "String"
+					},
+					{
+						"name": "latitud",
+						"type": "String"
+					},
+					{
+						"name": "longitud",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Paradas2023')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Paradas",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2023.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nro_parada",
+						"type": "String"
+					},
+					{
+						"name": "nombre_parada",
+						"type": "String"
+					},
+					{
+						"name": "zona",
+						"type": "String"
+					},
+					{
+						"name": "latitud",
+						"type": "String"
+					},
+					{
+						"name": "longitud",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2022')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Rutas",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2022.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nombre_ruta",
+						"type": "String"
+					},
+					{
+						"name": "origen",
+						"type": "String"
+					},
+					{
+						"name": "destino",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2023')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Rutas",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2023.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nombre_ruta",
+						"type": "String"
+					},
+					{
+						"name": "origen",
+						"type": "String"
+					},
+					{
+						"name": "destino",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2022')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Vehiculos",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2022.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nro_bus",
+						"type": "String"
+					},
+					{
+						"name": "placa",
+						"type": "String"
+					},
+					{
+						"name": "tipo_bus",
+						"type": "String"
+					},
+					{
+						"name": "capacidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2023')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Vehiculos",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "operacion_2023.xlsx",
+						"folderPath": "datos_xls",
+						"container": "raw"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "nro_bus",
+						"type": "String"
+					},
+					{
+						"name": "placa",
+						"type": "String"
+					},
+					{
+						"name": "tipo_bus",
+						"type": "String"
+					},
+					{
+						"name": "capacidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_desde",
+						"type": "String"
+					},
+					{
+						"name": "fecha_hasta",
+						"type": "String"
+					},
+					{
+						"name": "estado",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_Paradas_ERP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_ERP",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "ParadaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CodigoPublicado",
+						"type": "nvarchar"
+					},
+					{
+						"name": "NombreParada",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Zona",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Latitud",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "Longitud",
+						"type": "decimal",
+						"precision": 9,
+						"scale": 6
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "ParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_Rutas_ERP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_ERP",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CodigoRuta",
+						"type": "nvarchar"
+					},
+					{
+						"name": "NombreRuta",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Origen",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Destino",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "RutasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_Vehiculos_ERP')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_ERP",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Placa",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TipoVehiculo",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CapacidadEfectiva",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "VehiculosAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_SQL_Viajes_ERP')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -544,6 +1784,694 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Paradas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_Paradas",
+								"type": "DatasetReference"
+							},
+							"name": "ParadasCSV"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Paradas2022",
+								"type": "DatasetReference"
+							},
+							"name": "ParadasExcel2022"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Paradas2023",
+								"type": "DatasetReference"
+							},
+							"name": "ParadasExcel2023"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_Paradas_ERP",
+								"type": "DatasetReference"
+							},
+							"name": "ParadasSQL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Paradas",
+								"type": "DatasetReference"
+							},
+							"name": "SinkBronceParadas"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectParadasCSV"
+						},
+						{
+							"name": "SelectParadasExcel2022"
+						},
+						{
+							"name": "SelectParadasExcel2023"
+						},
+						{
+							"name": "ConvertirTiposParadasSQL"
+						},
+						{
+							"name": "SelectParadasSQL"
+						},
+						{
+							"name": "DerivarTiposParadasSQL"
+						},
+						{
+							"name": "UnionParadas2022"
+						},
+						{
+							"name": "UnionParadas2023"
+						},
+						{
+							"name": "UnionBronceParadas"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          nro_parada as string,",
+						"          nombre_parada as string,",
+						"          zona as string,",
+						"          latitud as string,",
+						"          longitud as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> ParadasCSV",
+						"source(output(",
+						"          nro_parada as string,",
+						"          nombre_parada as string,",
+						"          zona as string,",
+						"          latitud as string,",
+						"          longitud as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> ParadasExcel2022",
+						"source(output(",
+						"          nro_parada as string,",
+						"          nombre_parada as string,",
+						"          zona as string,",
+						"          latitud as string,",
+						"          longitud as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> ParadasExcel2023",
+						"source(output(",
+						"          AnioFuente as integer,",
+						"          ParadaHistoricaId as string,",
+						"          CodigoPublicado as string,",
+						"          NombreParada as string,",
+						"          Zona as string,",
+						"          Latitud as decimal(9,6),",
+						"          Longitud as decimal(9,6),",
+						"          VigenciaDesde as date,",
+						"          VigenciaHasta as date,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> ParadasSQL",
+						"ParadasCSV select(mapColumn(",
+						"          CodigoPublicado = nro_parada,",
+						"          NombreParada = nombre_parada,",
+						"          Zona = zona,",
+						"          Latitud = latitud,",
+						"          Longitud = longitud,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectParadasCSV",
+						"ParadasExcel2022 select(mapColumn(",
+						"          CodigoPublicado = nro_parada,",
+						"          NombreParada = nombre_parada,",
+						"          Zona = zona,",
+						"          Latitud = latitud,",
+						"          Longitud = longitud,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2022",
+						"ParadasExcel2023 select(mapColumn(",
+						"          CodigoPublicado = nro_parada,",
+						"          NombreParada = nombre_parada,",
+						"          Zona = zona,",
+						"          Latitud = latitud,",
+						"          Longitud = longitud,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2023",
+						"ParadasSQL select(mapColumn(",
+						"          AnioFuente,",
+						"          ParadaHistoricaId,",
+						"          CodigoPublicado,",
+						"          NombreParada,",
+						"          Zona,",
+						"          Latitud,",
+						"          Longitud,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> ConvertirTiposParadasSQL",
+						"ConvertirTiposParadasSQL select(mapColumn(",
+						"          AnioFuente,",
+						"          ParadaHistoricaId,",
+						"          CodigoPublicado,",
+						"          NombreParada,",
+						"          Zona,",
+						"          Latitud,",
+						"          Longitud,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectParadasSQL",
+						"SelectParadasSQL derive(AnioFuente = toString(AnioFuente),",
+						"          Latitud = toString(Latitud),",
+						"          Longitud = toString(Longitud),",
+						"          VigenciaDesde = toString(VigenciaDesde),",
+						"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposParadasSQL",
+						"SelectParadasCSV, SelectParadasExcel2022 union(byName: true)~> UnionParadas2022",
+						"UnionParadas2022, SelectParadasExcel2023 union(byName: true)~> UnionParadas2023",
+						"UnionParadas2023, DerivarTiposParadasSQL union(byName: true)~> UnionBronceParadas",
+						"UnionBronceParadas sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          AnioFuente as string,",
+						"          ParadaHistoricaId as string,",
+						"          CodigoPublicado as string,",
+						"          NombreParada as string,",
+						"          Zona as string,",
+						"          Latitud as string,",
+						"          Longitud as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          AnioFuente,",
+						"          ParadaHistoricaId,",
+						"          CodigoPublicado,",
+						"          NombreParada,",
+						"          Zona,",
+						"          Latitud,",
+						"          Longitud,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> SinkBronceParadas"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_CSV_Paradas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Paradas2022')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Paradas2023')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_Paradas_ERP')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Paradas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_Rutas",
+								"type": "DatasetReference"
+							},
+							"name": "RutasCSV"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Rutas2022",
+								"type": "DatasetReference"
+							},
+							"name": "RutasExcel2022"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Rutas2022",
+								"type": "DatasetReference"
+							},
+							"name": "RutasExcel2023"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_Rutas_ERP",
+								"type": "DatasetReference"
+							},
+							"name": "RutasSQL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Rutas",
+								"type": "DatasetReference"
+							},
+							"name": "SinkBronceRutas"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectRutasSQL"
+						},
+						{
+							"name": "SelectRutasCSV"
+						},
+						{
+							"name": "DerivarAnioRutasCSV"
+						},
+						{
+							"name": "SelectRutasExcel2022"
+						},
+						{
+							"name": "DerivarAnioRutas2022"
+						},
+						{
+							"name": "SelectRutasExcel2023"
+						},
+						{
+							"name": "DerivarAnioRutas2023"
+						},
+						{
+							"name": "UnionRutas2022"
+						},
+						{
+							"name": "UnionRutas2023"
+						},
+						{
+							"name": "UnionBronceRutas"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          cod_ruta as string,",
+						"          nombre_ruta as string,",
+						"          origen as string,",
+						"          destino as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RutasCSV",
+						"source(output(",
+						"          cod_ruta as string,",
+						"          nombre_ruta as string,",
+						"          origen as string,",
+						"          destino as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RutasExcel2022",
+						"source(output(",
+						"          cod_ruta as string,",
+						"          nombre_ruta as string,",
+						"          origen as string,",
+						"          destino as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> RutasExcel2023",
+						"source(output(",
+						"          AnioFuente as string,",
+						"          RutaHistoricaId as string,",
+						"          CodigoRuta as string,",
+						"          NombreRuta as string,",
+						"          Origen as string,",
+						"          Destino as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> RutasSQL",
+						"RutasSQL select(mapColumn(",
+						"          AnioFuente,",
+						"          RutaHistoricaId,",
+						"          CodigoRuta,",
+						"          NombreRuta,",
+						"          Origen,",
+						"          Destino,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasSQL",
+						"RutasCSV select(mapColumn(",
+						"          CodigoRuta = cod_ruta,",
+						"          NombreRuta = nombre_ruta,",
+						"          Origen = origen,",
+						"          Destino = destino,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV",
+						"SelectRutasCSV derive(AnioFuente = iif(     instr(VigenciaDesde, '/') > 0,     right(trim(VigenciaDesde), 4),     left(trim(VigenciaDesde), 4) )) ~> DerivarAnioRutasCSV",
+						"RutasExcel2022 select(mapColumn(",
+						"          CodigoRuta = cod_ruta,",
+						"          NombreRuta = nombre_ruta,",
+						"          Origen = origen,",
+						"          Destino = destino,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2022",
+						"SelectRutasExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioRutas2022",
+						"RutasExcel2023 select(mapColumn(",
+						"          CodigoRuta = cod_ruta,",
+						"          NombreRuta = nombre_ruta,",
+						"          Origen = origen,",
+						"          Destino = destino,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2023",
+						"SelectRutasExcel2023 derive(AnioFuente = '2023') ~> DerivarAnioRutas2023",
+						"DerivarAnioRutasCSV, DerivarAnioRutas2022 union(byName: true)~> UnionRutas2022",
+						"UnionRutas2022, DerivarAnioRutas2023 union(byName: true)~> UnionRutas2023",
+						"UnionRutas2023, SelectRutasSQL union(byName: true)~> UnionBronceRutas",
+						"UnionBronceRutas sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          AnioFuente as string,",
+						"          RutaHistoricaId as string,",
+						"          CodigoRuta as string,",
+						"          NombreRuta as string,",
+						"          Origen as string,",
+						"          Destino as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          AnioFuente,",
+						"          RutaHistoricaId,",
+						"          CodigoRuta,",
+						"          NombreRuta,",
+						"          Origen,",
+						"          Destino,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> SinkBronceRutas"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_CSV_Rutas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Rutas2022')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_Rutas_ERP')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Rutas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosCSV"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Vehiculos2022",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosExcel2022"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_Excel_Vehiculos2023",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosExcel2023"
+						},
+						{
+							"dataset": {
+								"referenceName": "DS_SQL_Vehiculos_ERP",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosSQL"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "SinkBronceVehiculos"
+						}
+					],
+					"transformations": [
+						{
+							"name": "SelectVehiculosCSV"
+						},
+						{
+							"name": "SelectVehiculosExcel2023"
+						},
+						{
+							"name": "SelectVehiculosSQL"
+						},
+						{
+							"name": "DerivarTiposVehiculosSQL"
+						},
+						{
+							"name": "UnionVehiculosExcel2023B"
+						},
+						{
+							"name": "SelectVehiculosExcel2022"
+						},
+						{
+							"name": "UnionVehiculosCSV2022A"
+						},
+						{
+							"name": "UnionBronceVehiculos"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          nro_bus as string,",
+						"          placa as string,",
+						"          tipo_bus as string,",
+						"          capacidad as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VehiculosCSV",
+						"source(output(",
+						"          nro_bus as string,",
+						"          placa as string,",
+						"          tipo_bus as string,",
+						"          capacidad as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VehiculosExcel2022",
+						"source(output(",
+						"          nro_bus as string,",
+						"          placa as string,",
+						"          tipo_bus as string,",
+						"          capacidad as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> VehiculosExcel2023",
+						"source(output(",
+						"          AnioFuente as integer,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as integer,",
+						"          VigenciaDesde as date,",
+						"          VigenciaHasta as date,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> VehiculosSQL",
+						"VehiculosCSV select(mapColumn(",
+						"          VehiculoId = nro_bus,",
+						"          Placa = placa,",
+						"          TipoVehiculo = tipo_bus,",
+						"          CapacidadEfectiva = capacidad,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: false,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosCSV",
+						"VehiculosExcel2023 select(mapColumn(",
+						"          VehiculoId = nro_bus,",
+						"          Placa = placa,",
+						"          TipoVehiculo = tipo_bus,",
+						"          CapacidadEfectiva = capacidad,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2023",
+						"VehiculosSQL select(mapColumn(",
+						"          AnioFuente,",
+						"          VehiculoId,",
+						"          Placa,",
+						"          TipoVehiculo,",
+						"          CapacidadEfectiva,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosSQL",
+						"SelectVehiculosSQL derive(AnioFuente = toString(AnioFuente),",
+						"          CapacidadEfectiva = toString(CapacidadEfectiva),",
+						"          VigenciaDesde = toString(VigenciaDesde),",
+						"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposVehiculosSQL",
+						"UnionVehiculosCSV2022A, SelectVehiculosExcel2023 union(byName: true)~> UnionVehiculosExcel2023B",
+						"VehiculosExcel2022 select(mapColumn(",
+						"          VehiculoId = nro_bus,",
+						"          Placa = placa,",
+						"          TipoVehiculo = tipo_bus,",
+						"          CapacidadEfectiva = capacidad,",
+						"          VigenciaDesde = fecha_desde,",
+						"          VigenciaHasta = fecha_hasta,",
+						"          Estado = estado",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022",
+						"SelectVehiculosCSV, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosCSV2022A",
+						"UnionVehiculosExcel2023B, DerivarTiposVehiculosSQL union(byName: true)~> UnionBronceVehiculos",
+						"UnionBronceVehiculos sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          AnioFuente as string,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          AnioFuente,",
+						"          VehiculoId,",
+						"          Placa,",
+						"          TipoVehiculo,",
+						"          CapacidadEfectiva,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> SinkBronceVehiculos"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_CSV_Vehiculos')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Vehiculos2022')]",
+				"[concat(variables('factoryId'), '/datasets/DS_Excel_Vehiculos2023')]",
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_Vehiculos_ERP')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Vehiculos')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Viajes')]",
@@ -795,833 +2723,40 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_CSV_Rutas')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "rutas.csv",
-						"folderPath": "datos_csv",
-						"container": "raw"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "cod_ruta",
-						"type": "String"
-					},
-					{
-						"name": "nombre_ruta",
-						"type": "String"
-					},
-					{
-						"name": "origen",
-						"type": "String"
-					},
-					{
-						"name": "destino",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2022')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Rutas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "cod_ruta",
-						"type": "String"
-					},
-					{
-						"name": "nombre_ruta",
-						"type": "String"
-					},
-					{
-						"name": "origen",
-						"type": "String"
-					},
-					{
-						"name": "destino",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2023')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Rutas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2023.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "cod_ruta",
-						"type": "String"
-					},
-					{
-						"name": "nombre_ruta",
-						"type": "String"
-					},
-					{
-						"name": "origen",
-						"type": "String"
-					},
-					{
-						"name": "destino",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_Rutas_ERP')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_ERP",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "AnioFuente",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "RutaHistoricaId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "CodigoRuta",
-						"type": "nvarchar"
-					},
-					{
-						"name": "NombreRuta",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Origen",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Destino",
-						"type": "nvarchar"
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "date"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "date"
-					},
-					{
-						"name": "Estado",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "RutasAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Rutas')]",
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"type": "MappingDataFlow",
 				"typeProperties": {
 					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DS_CSV_Rutas",
-								"type": "DatasetReference"
-							},
-							"name": "RutasCSV"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Excel_Rutas2022",
-								"type": "DatasetReference"
-							},
-							"name": "RutasExcel2022"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Excel_Rutas2022",
-								"type": "DatasetReference"
-							},
-							"name": "RutasExcel2023"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_SQL_Rutas_ERP",
-								"type": "DatasetReference"
-							},
-							"name": "RutasSQL"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DS_DW_Bronce_Rutas",
-								"type": "DatasetReference"
-							},
-							"name": "SinkBronceRutas"
-						}
-					],
-					"transformations": [
-						{
-							"name": "SelectRutasSQL"
-						},
-						{
-							"name": "SelectRutasCSV"
-						},
-						{
-							"name": "DerivarAnioRutasCSV"
-						},
-						{
-							"name": "SelectRutasExcel2022"
-						},
-						{
-							"name": "DerivarAnioRutas2022"
-						},
-						{
-							"name": "SelectRutasExcel2023"
-						},
-						{
-							"name": "DerivarAnioRutas2023"
-						},
-						{
-							"name": "UnionRutas2022"
-						},
-						{
-							"name": "UnionRutas2023"
-						},
-						{
-							"name": "UnionBronceRutas"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          cod_ruta as string,",
-						"          nombre_ruta as string,",
-						"          origen as string,",
-						"          destino as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> RutasCSV",
-						"source(output(",
-						"          cod_ruta as string,",
-						"          nombre_ruta as string,",
-						"          origen as string,",
-						"          destino as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> RutasExcel2022",
-						"source(output(",
-						"          cod_ruta as string,",
-						"          nombre_ruta as string,",
-						"          origen as string,",
-						"          destino as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> RutasExcel2023",
-						"source(output(",
-						"          AnioFuente as string,",
-						"          RutaHistoricaId as string,",
-						"          CodigoRuta as string,",
-						"          NombreRuta as string,",
-						"          Origen as string,",
-						"          Destino as string,",
-						"          VigenciaDesde as string,",
-						"          VigenciaHasta as string,",
-						"          Estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> RutasSQL",
-						"RutasSQL select(mapColumn(",
-						"          AnioFuente,",
-						"          RutaHistoricaId,",
-						"          CodigoRuta,",
-						"          NombreRuta,",
-						"          Origen,",
-						"          Destino,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectRutasSQL",
-						"RutasCSV select(mapColumn(",
-						"          CodigoRuta = cod_ruta,",
-						"          NombreRuta = nombre_ruta,",
-						"          Origen = origen,",
-						"          Destino = destino,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectRutasCSV",
-						"SelectRutasCSV derive(AnioFuente = iif(     instr(VigenciaDesde, '/') > 0,     right(trim(VigenciaDesde), 4),     left(trim(VigenciaDesde), 4) )) ~> DerivarAnioRutasCSV",
-						"RutasExcel2022 select(mapColumn(",
-						"          CodigoRuta = cod_ruta,",
-						"          NombreRuta = nombre_ruta,",
-						"          Origen = origen,",
-						"          Destino = destino,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2022",
-						"SelectRutasExcel2022 derive(AnioFuente = '2022') ~> DerivarAnioRutas2022",
-						"RutasExcel2023 select(mapColumn(",
-						"          CodigoRuta = cod_ruta,",
-						"          NombreRuta = nombre_ruta,",
-						"          Origen = origen,",
-						"          Destino = destino,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectRutasExcel2023",
-						"SelectRutasExcel2023 derive(AnioFuente = '2023') ~> DerivarAnioRutas2023",
-						"DerivarAnioRutasCSV, DerivarAnioRutas2022 union(byName: true)~> UnionRutas2022",
-						"UnionRutas2022, DerivarAnioRutas2023 union(byName: true)~> UnionRutas2023",
-						"UnionRutas2023, SelectRutasSQL union(byName: true)~> UnionBronceRutas",
-						"UnionBronceRutas sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          AnioFuente as string,",
-						"          RutaHistoricaId as string,",
-						"          CodigoRuta as string,",
-						"          NombreRuta as string,",
-						"          Origen as string,",
-						"          Destino as string,",
-						"          VigenciaDesde as string,",
-						"          VigenciaHasta as string,",
-						"          Estado as string",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          AnioFuente,",
-						"          RutaHistoricaId,",
-						"          CodigoRuta,",
-						"          NombreRuta,",
-						"          Origen,",
-						"          Destino,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     )) ~> SinkBronceRutas"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_CSV_Rutas')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Excel_Rutas2022')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_Rutas_ERP')]",
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Rutas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Rutas')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_DW",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "AnioFuente",
-						"type": "varchar"
-					},
-					{
-						"name": "RutaHistoricaId",
-						"type": "varchar"
-					},
-					{
-						"name": "CodigoRuta",
-						"type": "varchar"
-					},
-					{
-						"name": "NombreRuta",
-						"type": "varchar"
-					},
-					{
-						"name": "Origen",
-						"type": "varchar"
-					},
-					{
-						"name": "Destino",
-						"type": "varchar"
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "varchar"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "varchar"
-					},
-					{
-						"name": "Estado",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "bronze",
-					"table": "RutasAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Rutas')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Ejecutar_Bronze_Rutas",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_Rutas",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"RutasCSV": {},
-									"RutasExcel2022": {},
-									"RutasExcel2023": {},
-									"RutasSQL": {},
-									"SinkBronceRutas": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Rutas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Paradas')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_DW",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "AnioFuente",
-						"type": "varchar"
-					},
-					{
-						"name": "ParadaHistoricaId",
-						"type": "varchar"
-					},
-					{
-						"name": "CodigoPublicado",
-						"type": "varchar"
-					},
-					{
-						"name": "NombreParada",
-						"type": "varchar"
-					},
-					{
-						"name": "Zona",
-						"type": "varchar"
-					},
-					{
-						"name": "Latitud",
-						"type": "varchar"
-					},
-					{
-						"name": "Longitud",
-						"type": "varchar"
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "varchar"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "varchar"
-					},
-					{
-						"name": "Estado",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "bronze",
-					"table": "ParadasAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Paradas')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DS_CSV_Paradas",
-								"type": "DatasetReference"
-							},
-							"name": "ParadasCSV"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Excel_Paradas2022",
-								"type": "DatasetReference"
-							},
-							"name": "ParadasExcel2022"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Excel_Paradas2023",
-								"type": "DatasetReference"
-							},
-							"name": "ParadasExcel2023"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_SQL_Paradas_ERP",
-								"type": "DatasetReference"
-							},
-							"name": "ParadasSQL"
-						}
-					],
-					"sinks": [
 						{
 							"dataset": {
 								"referenceName": "DS_DW_Bronce_Paradas",
 								"type": "DatasetReference"
 							},
-							"name": "SinkBronceParadas"
+							"name": "ParadasBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_CSV_Paradas",
+								"type": "DatasetReference"
+							},
+							"name": "ParadasSilver"
 						}
 					],
 					"transformations": [
 						{
-							"name": "SelectParadasCSV"
+							"name": "LimpiarTextoParadas"
 						},
 						{
-							"name": "SelectParadasExcel2022"
-						},
-						{
-							"name": "SelectParadasExcel2023"
-						},
-						{
-							"name": "ConvertirTiposParadasSQL"
-						},
-						{
-							"name": "SelectParadasSQL"
-						},
-						{
-							"name": "DerivarTiposParadasSQL"
-						},
-						{
-							"name": "UnionParadas2022"
-						},
-						{
-							"name": "UnionParadas2023"
-						},
-						{
-							"name": "UnionBronceParadas"
+							"name": "ConvertirDatosParadas"
 						}
 					],
 					"scriptLines": [
 						"source(output(",
-						"          nro_parada as string,",
-						"          nombre_parada as string,",
-						"          zona as string,",
-						"          latitud as string,",
-						"          longitud as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> ParadasCSV",
-						"source(output(",
-						"          nro_parada as string,",
-						"          nombre_parada as string,",
-						"          zona as string,",
-						"          latitud as string,",
-						"          longitud as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> ParadasExcel2022",
-						"source(output(",
-						"          nro_parada as string,",
-						"          nombre_parada as string,",
-						"          zona as string,",
-						"          latitud as string,",
-						"          longitud as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> ParadasExcel2023",
-						"source(output(",
-						"          AnioFuente as integer,",
-						"          ParadaHistoricaId as string,",
-						"          CodigoPublicado as string,",
-						"          NombreParada as string,",
-						"          Zona as string,",
-						"          Latitud as decimal(9,6),",
-						"          Longitud as decimal(9,6),",
-						"          VigenciaDesde as date,",
-						"          VigenciaHasta as date,",
-						"          Estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> ParadasSQL",
-						"ParadasCSV select(mapColumn(",
-						"          CodigoPublicado = nro_parada,",
-						"          NombreParada = nombre_parada,",
-						"          Zona = zona,",
-						"          Latitud = latitud,",
-						"          Longitud = longitud,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectParadasCSV",
-						"ParadasExcel2022 select(mapColumn(",
-						"          CodigoPublicado = nro_parada,",
-						"          NombreParada = nombre_parada,",
-						"          Zona = zona,",
-						"          Latitud = latitud,",
-						"          Longitud = longitud,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2022",
-						"ParadasExcel2023 select(mapColumn(",
-						"          CodigoPublicado = nro_parada,",
-						"          NombreParada = nombre_parada,",
-						"          Zona = zona,",
-						"          Latitud = latitud,",
-						"          Longitud = longitud,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectParadasExcel2023",
-						"ParadasSQL select(mapColumn(",
-						"          AnioFuente,",
-						"          ParadaHistoricaId,",
-						"          CodigoPublicado,",
-						"          NombreParada,",
-						"          Zona,",
-						"          Latitud,",
-						"          Longitud,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> ConvertirTiposParadasSQL",
-						"ConvertirTiposParadasSQL select(mapColumn(",
-						"          AnioFuente,",
-						"          ParadaHistoricaId,",
-						"          CodigoPublicado,",
-						"          NombreParada,",
-						"          Zona,",
-						"          Latitud,",
-						"          Longitud,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectParadasSQL",
-						"SelectParadasSQL derive(AnioFuente = toString(AnioFuente),",
-						"          Latitud = toString(Latitud),",
-						"          Longitud = toString(Longitud),",
-						"          VigenciaDesde = toString(VigenciaDesde),",
-						"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposParadasSQL",
-						"SelectParadasCSV, SelectParadasExcel2022 union(byName: true)~> UnionParadas2022",
-						"UnionParadas2022, SelectParadasExcel2023 union(byName: true)~> UnionParadas2023",
-						"UnionParadas2023, DerivarTiposParadasSQL union(byName: true)~> UnionBronceParadas",
-						"UnionBronceParadas sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
 						"          AnioFuente as string,",
 						"          ParadaHistoricaId as string,",
 						"          CodigoPublicado as string,",
@@ -1633,878 +2768,44 @@
 						"          VigenciaHasta as string,",
 						"          Estado as string",
 						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          AnioFuente,",
-						"          ParadaHistoricaId,",
-						"          CodigoPublicado,",
-						"          NombreParada,",
-						"          Zona,",
-						"          Latitud,",
-						"          Longitud,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     )) ~> SinkBronceParadas"
-					]
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_CSV_Paradas')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Excel_Paradas2022')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Excel_Paradas2023')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_Paradas_ERP')]",
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Paradas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_CSV_Paradas')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "paradas.csv",
-						"folderPath": "datos_csv",
-						"container": "raw"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "nro_parada",
-						"type": "String"
-					},
-					{
-						"name": "nombre_parada",
-						"type": "String"
-					},
-					{
-						"name": "zona",
-						"type": "String"
-					},
-					{
-						"name": "latitud",
-						"type": "String"
-					},
-					{
-						"name": "longitud",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Paradas2022')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Paradas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_parada",
-						"type": "String"
-					},
-					{
-						"name": "nombre_parada",
-						"type": "String"
-					},
-					{
-						"name": "zona",
-						"type": "String"
-					},
-					{
-						"name": "latitud",
-						"type": "String"
-					},
-					{
-						"name": "longitud",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Paradas2023')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Paradas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2023.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_parada",
-						"type": "String"
-					},
-					{
-						"name": "nombre_parada",
-						"type": "String"
-					},
-					{
-						"name": "zona",
-						"type": "String"
-					},
-					{
-						"name": "latitud",
-						"type": "String"
-					},
-					{
-						"name": "longitud",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_Paradas_ERP')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_ERP",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "AnioFuente",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "ParadaHistoricaId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "CodigoPublicado",
-						"type": "nvarchar"
-					},
-					{
-						"name": "NombreParada",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Zona",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Latitud",
-						"type": "decimal",
-						"precision": 9,
-						"scale": 6
-					},
-					{
-						"name": "Longitud",
-						"type": "decimal",
-						"precision": 9,
-						"scale": 6
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "date"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "date"
-					},
-					{
-						"name": "Estado",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "ParadasAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Paradas')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Ejecutar_Bronze_Paradas",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_Paradas",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"ParadasCSV": {},
-									"ParadasExcel2022": {},
-									"ParadasExcel2023": {},
-									"ParadasSQL": {},
-									"SinkBronceParadas": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Paradas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DF_Bronce_Vehiculos')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DS_CSV_Vehiculos",
-								"type": "DatasetReference"
-							},
-							"name": "VehiculosCSV"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Excel_Vehiculos2022",
-								"type": "DatasetReference"
-							},
-							"name": "VehiculosExcel2022"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_Excel_Vehiculos2023",
-								"type": "DatasetReference"
-							},
-							"name": "VehiculosExcel2023"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_SQL_Vehiculos_ERP",
-								"type": "DatasetReference"
-							},
-							"name": "VehiculosSQL"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DS_DW_Bronce_Vehiculos",
-								"type": "DatasetReference"
-							},
-							"name": "SinkBronceVehiculos"
-						}
-					],
-					"transformations": [
-						{
-							"name": "SelectVehiculosCSV"
-						},
-						{
-							"name": "SelectVehiculosExcel2023"
-						},
-						{
-							"name": "SelectVehiculosSQL"
-						},
-						{
-							"name": "DerivarTiposVehiculosSQL"
-						},
-						{
-							"name": "UnionVehiculosExcel2023B"
-						},
-						{
-							"name": "SelectVehiculosExcel2022"
-						},
-						{
-							"name": "UnionVehiculosCSV2022A"
-						},
-						{
-							"name": "UnionBronceVehiculos"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          nro_bus as string,",
-						"          placa as string,",
-						"          tipo_bus as string,",
-						"          capacidad as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> VehiculosCSV",
-						"source(output(",
-						"          nro_bus as string,",
-						"          placa as string,",
-						"          tipo_bus as string,",
-						"          capacidad as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> VehiculosExcel2022",
-						"source(output(",
-						"          nro_bus as string,",
-						"          placa as string,",
-						"          tipo_bus as string,",
-						"          capacidad as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> VehiculosExcel2023",
-						"source(output(",
-						"          AnioFuente as integer,",
-						"          VehiculoId as string,",
-						"          Placa as string,",
-						"          TipoVehiculo as string,",
-						"          CapacidadEfectiva as integer,",
-						"          VigenciaDesde as date,",
-						"          VigenciaHasta as date,",
-						"          Estado as string",
-						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> VehiculosSQL",
-						"VehiculosCSV select(mapColumn(",
-						"          VehiculoId = nro_bus,",
-						"          Placa = placa,",
-						"          TipoVehiculo = tipo_bus,",
-						"          CapacidadEfectiva = capacidad,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: false,",
-						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosCSV",
-						"VehiculosExcel2023 select(mapColumn(",
-						"          VehiculoId = nro_bus,",
-						"          Placa = placa,",
-						"          TipoVehiculo = tipo_bus,",
-						"          CapacidadEfectiva = capacidad,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2023",
-						"VehiculosSQL select(mapColumn(",
-						"          AnioFuente,",
-						"          VehiculoId,",
-						"          Placa,",
-						"          TipoVehiculo,",
-						"          CapacidadEfectiva,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosSQL",
-						"SelectVehiculosSQL derive(AnioFuente = toString(AnioFuente),",
-						"          CapacidadEfectiva = toString(CapacidadEfectiva),",
-						"          VigenciaDesde = toString(VigenciaDesde),",
-						"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposVehiculosSQL",
-						"UnionVehiculosCSV2022A, SelectVehiculosExcel2023 union(byName: true)~> UnionVehiculosExcel2023B",
-						"VehiculosExcel2022 select(mapColumn(",
-						"          VehiculoId = nro_bus,",
-						"          Placa = placa,",
-						"          TipoVehiculo = tipo_bus,",
-						"          CapacidadEfectiva = capacidad,",
-						"          VigenciaDesde = fecha_desde,",
-						"          VigenciaHasta = fecha_hasta,",
-						"          Estado = estado",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022",
-						"SelectVehiculosCSV, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosCSV2022A",
-						"UnionVehiculosExcel2023B, DerivarTiposVehiculosSQL union(byName: true)~> UnionBronceVehiculos",
-						"UnionBronceVehiculos sink(allowSchemaDrift: true,",
+						"     format: 'table') ~> ParadasBronze",
+						"ParadasBronze derive(ParadaHistoricaId = trim(ParadaHistoricaId),",
+						"          NombreParada = trim(NombreParada),",
+						"          Zona = upper(trim(Zona)),",
+						"          Estado = upper(trim(Estado))) ~> LimpiarTextoParadas",
+						"LimpiarTextoParadas derive(Latitud = toDecimal(trim(Latitud), 10, 6),",
+						"          Longitud = toDecimal(trim(Longitud), 10, 6),",
+						"          VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
+						"          VigenciaHasta = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) )) ~> ConvertirDatosParadas",
+						"ConvertirDatosParadas sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
-						"          AnioFuente as string,",
-						"          VehiculoId as string,",
-						"          Placa as string,",
-						"          TipoVehiculo as string,",
-						"          CapacidadEfectiva as string,",
-						"          VigenciaDesde as string,",
-						"          VigenciaHasta as string,",
-						"          Estado as string",
+						"          nro_parada as string,",
+						"          nombre_parada as string,",
+						"          zona as string,",
+						"          latitud as string,",
+						"          longitud as string,",
+						"          fecha_desde as string,",
+						"          fecha_hasta as string,",
+						"          estado as string",
 						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
 						"     mapColumn(",
-						"          AnioFuente,",
-						"          VehiculoId,",
-						"          Placa,",
-						"          TipoVehiculo,",
-						"          CapacidadEfectiva,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     )) ~> SinkBronceVehiculos"
+						"          zona = Zona,",
+						"          latitud = Latitud,",
+						"          longitud = Longitud,",
+						"          estado = Estado",
+						"     )) ~> ParadasSilver"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_CSV_Vehiculos')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Excel_Vehiculos2022')]",
-				"[concat(variables('factoryId'), '/datasets/DS_Excel_Vehiculos2023')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_Vehiculos_ERP')]",
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Vehiculos')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_CSV_Vehiculos')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "vehiculos.csv",
-						"folderPath": "datos_csv",
-						"container": "raw"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "nro_bus",
-						"type": "String"
-					},
-					{
-						"name": "placa",
-						"type": "String"
-					},
-					{
-						"name": "tipo_bus",
-						"type": "String"
-					},
-					{
-						"name": "capacidad",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2022')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Vehiculos",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_bus",
-						"type": "String"
-					},
-					{
-						"name": "placa",
-						"type": "String"
-					},
-					{
-						"name": "tipo_bus",
-						"type": "String"
-					},
-					{
-						"name": "capacidad",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2023')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Vehiculos",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2023.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_bus",
-						"type": "String"
-					},
-					{
-						"name": "placa",
-						"type": "String"
-					},
-					{
-						"name": "tipo_bus",
-						"type": "String"
-					},
-					{
-						"name": "capacidad",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_SQL_Vehiculos_ERP')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_ERP",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "AnioFuente",
-						"type": "smallint",
-						"precision": 5
-					},
-					{
-						"name": "VehiculoId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Placa",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TipoVehiculo",
-						"type": "nvarchar"
-					},
-					{
-						"name": "CapacidadEfectiva",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "date"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "date"
-					},
-					{
-						"name": "Estado",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "VehiculosAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Vehiculos')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_DW",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "AnioFuente",
-						"type": "varchar"
-					},
-					{
-						"name": "VehiculoId",
-						"type": "varchar"
-					},
-					{
-						"name": "Placa",
-						"type": "varchar"
-					},
-					{
-						"name": "TipoVehiculo",
-						"type": "varchar"
-					},
-					{
-						"name": "CapacidadEfectiva",
-						"type": "varchar"
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "varchar"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "varchar"
-					},
-					{
-						"name": "Estado",
-						"type": "varchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "bronze",
-					"table": "VehiculosAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Vehiculos')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Ejecutar_Bronze_Vehiculos",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_Vehiculos",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"VehiculosCSV": {},
-									"VehiculosExcel2022": {},
-									"VehiculosExcel2023": {},
-									"VehiculosSQL": {},
-									"SinkBronceVehiculos": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Vehiculos')]"
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Paradas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_CSV_Paradas')]"
 			]
 		},
 		{
@@ -2597,108 +2898,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Vehiculos')]",
 				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Vehiculos')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Vehiculos')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_DW",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "SilverId",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "VehiculoId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Placa",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TipoVehiculo",
-						"type": "nvarchar"
-					},
-					{
-						"name": "CapacidadEfectiva",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "VigenciaDesde",
-						"type": "date"
-					},
-					{
-						"name": "VigenciaHasta",
-						"type": "date"
-					},
-					{
-						"name": "Estado",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "silver",
-					"table": "VehiculosAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "CargarSilverVehiculos",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Silver_Vehiculos",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"VehiculosBronze": {},
-									"VehiculosSilver": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Vehiculos')]"
 			]
 		}
 	]
