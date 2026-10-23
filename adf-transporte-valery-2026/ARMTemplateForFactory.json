@@ -2741,7 +2741,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "DS_CSV_Paradas",
+								"referenceName": "DS_DW_Silver_Paradas",
 								"type": "DatasetReference"
 							},
 							"name": "ParadasSilver"
@@ -2783,17 +2783,25 @@
 						"ConvertirDatosParadas sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
-						"          nro_parada as string,",
-						"          nombre_parada as string,",
-						"          zona as string,",
-						"          latitud as string,",
-						"          longitud as string,",
-						"          fecha_desde as string,",
-						"          fecha_hasta as string,",
-						"          estado as string",
+						"          SilverId as long,",
+						"          ParadaHistoricaId as string,",
+						"          CodigoPublicado as string,",
+						"          NombreParada as string,",
+						"          Zona as string,",
+						"          Latitud as decimal(9,6),",
+						"          Longitud as decimal(9,6),",
+						"          VigenciaDesde as date,",
+						"          VigenciaHasta as date,",
+						"          Estado as string",
 						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
 						"     mapColumn(",
 						"          zona = Zona,",
 						"          latitud = Latitud,",
@@ -2805,7 +2813,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Paradas')]",
-				"[concat(variables('factoryId'), '/datasets/DS_CSV_Paradas')]"
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Paradas')]"
 			]
 		},
 		{
