@@ -77,10 +77,15 @@
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
-				"          zona = Zona,",
-				"          latitud = Latitud,",
-				"          longitud = Longitud,",
-				"          estado = Estado",
+				"          ParadaHistoricaId,",
+				"          CodigoPublicado,",
+				"          NombreParada,",
+				"          Zona,",
+				"          Latitud,",
+				"          Longitud,",
+				"          VigenciaDesde,",
+				"          VigenciaHasta,",
+				"          Estado",
 				"     )) ~> ParadasSilver"
 			]
 		}
