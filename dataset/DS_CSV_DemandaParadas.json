@@ -1,0 +1,57 @@
+{
+	"name": "DS_CSV_DemandaParadas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "demanda_paradas.csv",
+				"folderPath": "datos_csv",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "fec_servicio",
+				"type": "String"
+			},
+			{
+				"name": "cod_ruta",
+				"type": "String"
+			},
+			{
+				"name": "nro_parada",
+				"type": "String"
+			},
+			{
+				"name": "franja",
+				"type": "String"
+			},
+			{
+				"name": "abordajes_manuales",
+				"type": "String"
+			},
+			{
+				"name": "descensos_manuales",
+				"type": "String"
+			},
+			{
+				"name": "demanda_no_atendida",
+				"type": "String"
+			},
+			{
+				"name": "medicion",
+				"type": "String"
+			}
+		]
+	}
+}
