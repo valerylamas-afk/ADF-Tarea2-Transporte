@@ -2506,6 +2506,200 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Vehiculos')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosSilver"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LimpiarTextoVehiculos"
+						},
+						{
+							"name": "ConvertirDatosVehiculos"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> VehiculosBronze",
+						"VehiculosBronze derive(VehiculoId = trim(VehiculoId),",
+						"          Placa = upper(trim(Placa)),",
+						"          TipoVehiculo = upper(trim(TipoVehiculo)),",
+						"          Estado = upper(trim(Estado))) ~> LimpiarTextoVehiculos",
+						"LimpiarTextoVehiculos derive(CapacidadEfectiva = toInteger(trim(CapacidadEfectiva)),",
+						"          VigenciaDesde = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) ),",
+						"          VigenciaHasta = iif(     instr(trim(VigenciaHasta), '/') > 0,     toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),     toDate(trim(VigenciaHasta), 'yyyy-MM-dd') )) ~> ConvertirDatosVehiculos",
+						"ConvertirDatosVehiculos sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as integer,",
+						"          VigenciaDesde as date,",
+						"          VigenciaHasta as date,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          VehiculoId,",
+						"          Placa,",
+						"          TipoVehiculo,",
+						"          CapacidadEfectiva,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> VehiculosSilver"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Vehiculos')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Vehiculos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Placa",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TipoVehiculo",
+						"type": "nvarchar"
+					},
+					{
+						"name": "CapacidadEfectiva",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "VigenciaDesde",
+						"type": "date"
+					},
+					{
+						"name": "VigenciaHasta",
+						"type": "date"
+					},
+					{
+						"name": "Estado",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "VehiculosAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarSilverVehiculos",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Silver_Vehiculos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"VehiculosBronze": {},
+									"VehiculosSilver": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Vehiculos')]"
+			]
 		}
 	]
 }
