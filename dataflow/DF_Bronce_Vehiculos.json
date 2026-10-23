@@ -5,14 +5,43 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"dataset": {
+						"referenceName": "DS_CSV_Vehiculos",
+						"type": "DatasetReference"
+					},
 					"name": "VehiculosCSV"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "SelectVehiculosCSV"
+				}
+			],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> VehiculosCSV"
+				"source(output(",
+				"          nro_bus as string,",
+				"          placa as string,",
+				"          tipo_bus as string,",
+				"          capacidad as string,",
+				"          fecha_desde as string,",
+				"          fecha_hasta as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> VehiculosCSV",
+				"VehiculosCSV select(mapColumn(",
+				"          VehiculoId = nro_bus,",
+				"          Placa = placa,",
+				"          TipoVehiculo = tipo_bus,",
+				"          CapacidadEfectiva = capacidad,",
+				"          VigenciaDesde = fecha_desde,",
+				"          VigenciaHasta = fecha_hasta,",
+				"          Estado = estado",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosCSV"
 			]
 		}
 	}
