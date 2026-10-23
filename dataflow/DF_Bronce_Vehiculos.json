@@ -146,19 +146,19 @@
 				"          CapacidadEfectiva = toString(CapacidadEfectiva),",
 				"          VigenciaDesde = toString(VigenciaDesde),",
 				"          VigenciaHasta = toString(VigenciaHasta)) ~> DerivarTiposVehiculosSQL",
-				"UnionVehiculosCSV2022A, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosExcel2023B",
+				"UnionVehiculosCSV2022A, SelectVehiculosExcel2023 union(byName: true)~> UnionVehiculosExcel2023B",
 				"VehiculosExcel2022 select(mapColumn(",
-				"          nro_bus,",
-				"          placa,",
-				"          tipo_bus,",
-				"          capacidad,",
-				"          fecha_desde,",
-				"          fecha_hasta,",
-				"          estado",
+				"          VehiculoId = nro_bus,",
+				"          Placa = placa,",
+				"          TipoVehiculo = tipo_bus,",
+				"          CapacidadEfectiva = capacidad,",
+				"          VigenciaDesde = fecha_desde,",
+				"          VigenciaHasta = fecha_hasta,",
+				"          Estado = estado",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2022",
-				"SelectVehiculosCSV union(byName: true)~> UnionVehiculosCSV2022A"
+				"SelectVehiculosCSV, SelectVehiculosExcel2022 union(byName: true)~> UnionVehiculosCSV2022A"
 			]
 		}
 	}
