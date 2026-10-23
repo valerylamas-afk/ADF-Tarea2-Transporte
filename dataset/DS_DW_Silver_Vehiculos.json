@@ -1,0 +1,51 @@
+{
+	"name": "DS_DW_Silver_Vehiculos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_DW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "SilverId",
+				"type": "bigint",
+				"precision": 19
+			},
+			{
+				"name": "VehiculoId",
+				"type": "nvarchar"
+			},
+			{
+				"name": "Placa",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TipoVehiculo",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CapacidadEfectiva",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "VigenciaDesde",
+				"type": "date"
+			},
+			{
+				"name": "VigenciaHasta",
+				"type": "date"
+			},
+			{
+				"name": "Estado",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "VehiculosAzure"
+		}
+	}
+}
