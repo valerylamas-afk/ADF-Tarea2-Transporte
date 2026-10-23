@@ -19,6 +19,10 @@
 					"name": "VehiculosExcel2022"
 				},
 				{
+					"dataset": {
+						"referenceName": "DS_Excel_Vehiculos2023",
+						"type": "DatasetReference"
+					},
 					"name": "VehiculosExcel2023"
 				}
 			],
@@ -26,6 +30,9 @@
 			"transformations": [
 				{
 					"name": "SelectVehiculosCSV"
+				},
+				{
+					"name": "SelectVehiculosExcel2023"
 				}
 			],
 			"scriptLines": [
@@ -53,8 +60,18 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> VehiculosExcel2022",
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> VehiculosExcel2023",
+				"source(output(",
+				"          nro_bus as string,",
+				"          placa as string,",
+				"          tipo_bus as string,",
+				"          capacidad as string,",
+				"          fecha_desde as string,",
+				"          fecha_hasta as string,",
+				"          estado as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> VehiculosExcel2023",
 				"VehiculosCSV select(mapColumn(",
 				"          VehiculoId = nro_bus,",
 				"          Placa = placa,",
@@ -65,7 +82,18 @@
 				"          Estado = estado",
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
-				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosCSV"
+				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosCSV",
+				"VehiculosExcel2023 select(mapColumn(",
+				"          VehiculoId = nro_bus,",
+				"          Placa = placa,",
+				"          TipoVehiculo = tipo_bus,",
+				"          CapacidadEfectiva = capacidad,",
+				"          VigenciaDesde = fecha_desde,",
+				"          VigenciaHasta = fecha_hasta,",
+				"          Estado = estado",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectVehiculosExcel2023"
 			]
 		}
 	}
