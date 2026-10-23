@@ -12,7 +12,15 @@
 					"name": "ParadasBronze"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_CSV_Paradas",
+						"type": "DatasetReference"
+					},
+					"name": "ParadasSilver"
+				}
+			],
 			"transformations": [
 				{
 					"name": "LimpiarTextoParadas"
@@ -44,7 +52,28 @@
 				"          Estado = upper(trim(Estado))) ~> LimpiarTextoParadas",
 				"LimpiarTextoParadas derive(Latitud = toDecimal(trim(Latitud), 10, 6),",
 				"          Longitud = toDecimal(trim(Longitud), 10, 6),",
-				"          VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),     toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) )) ~> ConvertirDatosParadas"
+				"          VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
+				"          VigenciaHasta = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) )) ~> ConvertirDatosParadas",
+				"ConvertirDatosParadas sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          nro_parada as string,",
+				"          nombre_parada as string,",
+				"          zona as string,",
+				"          latitud as string,",
+				"          longitud as string,",
+				"          fecha_desde as string,",
+				"          fecha_hasta as string,",
+				"          estado as string",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          zona = Zona,",
+				"          latitud = Latitud,",
+				"          longitud = Longitud,",
+				"          estado = Estado",
+				"     )) ~> ParadasSilver"
 			]
 		}
 	}
