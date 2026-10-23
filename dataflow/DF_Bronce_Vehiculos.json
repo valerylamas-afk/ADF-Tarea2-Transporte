@@ -1,0 +1,19 @@
+{
+	"name": "DF_Bronce_Vehiculos",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "VehiculosCSV"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> VehiculosCSV"
+			]
+		}
+	}
+}

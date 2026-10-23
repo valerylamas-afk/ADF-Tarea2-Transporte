@@ -1,0 +1,53 @@
+{
+	"name": "DS_CSV_Vehiculos",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "vehiculos.csv",
+				"folderPath": "datos_csv",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "nro_bus",
+				"type": "String"
+			},
+			{
+				"name": "placa",
+				"type": "String"
+			},
+			{
+				"name": "tipo_bus",
+				"type": "String"
+			},
+			{
+				"name": "capacidad",
+				"type": "String"
+			},
+			{
+				"name": "fecha_desde",
+				"type": "String"
+			},
+			{
+				"name": "fecha_hasta",
+				"type": "String"
+			},
+			{
+				"name": "estado",
+				"type": "String"
+			}
+		]
+	}
+}
