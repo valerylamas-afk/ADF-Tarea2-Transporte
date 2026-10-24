@@ -132,6 +132,55 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_DemandaParadas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CargarBronzeDemanda",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_DemandaParadas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"DemandaCSV": {},
+									"DemandaExcel2022": {},
+									"DemandaExcel2023": {},
+									"DemandaSQL": {},
+									"DemandaBronzeDestino": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_DemandaParadas')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -322,6 +371,52 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Vehiculos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_DemandaParadas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EjecutarSilverDemanda",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Silver_DemandaParadas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"DemandaBronze": {},
+									"DestinoSilverDemanda": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_DemandaParadas')]"
 			]
 		},
 		{
@@ -988,6 +1083,72 @@
 				"typeProperties": {
 					"schema": "bronze",
 					"table": "ViajesAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_DemandaParadas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "DemandaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FechaServicio",
+						"type": "date"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ParadaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Franja",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ValidacionesTarjeta",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Descensos",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "DemandaNoAtendida",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "Metodo",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "DemandaParadasAzure"
 				}
 			},
 			"dependsOn": [
@@ -3276,6 +3437,108 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_DemandaParadas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_DemandaParadas",
+								"type": "DatasetReference"
+							},
+							"name": "DemandaBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_DemandaParadas",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoSilverDemanda"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LimpiarTextoDemanda"
+						},
+						{
+							"name": "ConvertirDatosDemanda"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          DemandaId as string,",
+						"          FechaServicio as string,",
+						"          RutaHistoricaId as string,",
+						"          ParadaHistoricaId as string,",
+						"          Franja as string,",
+						"          ValidacionesTarjeta as string,",
+						"          Descensos as string,",
+						"          DemandaNoAtendida as string,",
+						"          Metodo as string,",
+						"          abordajes_manuales as string,",
+						"          estimacion_abordajes as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> DemandaBronze",
+						"DemandaBronze derive(DemandaId = trim(DemandaId),",
+						"          RutaHistoricaId = trim(RutaHistoricaId),",
+						"          ParadaHistoricaId = trim(ParadaHistoricaId),",
+						"          Franja = upper(trim(Franja)),",
+						"          Metodo = upper(trim(Metodo))) ~> LimpiarTextoDemanda",
+						"LimpiarTextoDemanda derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) ),",
+						"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
+						"          Descensos = toInteger(Descensos),",
+						"          DemandaNoAtendida = toInteger(DemandaNoAtendida)) ~> ConvertirDatosDemanda",
+						"ConvertirDatosDemanda sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          DemandaId as string,",
+						"          FechaServicio as date,",
+						"          RutaHistoricaId as string,",
+						"          ParadaHistoricaId as string,",
+						"          Franja as string,",
+						"          ValidacionesTarjeta as integer,",
+						"          Descensos as integer,",
+						"          DemandaNoAtendida as integer,",
+						"          Metodo as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          DemandaId,",
+						"          FechaServicio,",
+						"          RutaHistoricaId,",
+						"          ParadaHistoricaId,",
+						"          Franja,",
+						"          ValidacionesTarjeta,",
+						"          Descensos,",
+						"          DemandaNoAtendida,",
+						"          Metodo",
+						"     )) ~> DestinoSilverDemanda"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_DemandaParadas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_DemandaParadas')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_Silver_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -3467,56 +3730,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_DemandaParadas')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "CargarBronzeDemanda",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_DemandaParadas",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"DemandaCSV": {},
-									"DemandaExcel2022": {},
-									"DemandaExcel2023": {},
-									"DemandaSQL": {},
-									"DemandaBronzeDestino": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_DemandaParadas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DF_Silver_DemandaParadas')]",
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Rutas')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3525,71 +3739,55 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "DS_DW_Bronce_DemandaParadas",
+								"referenceName": "DS_DW_Bronce_Rutas",
 								"type": "DatasetReference"
 							},
-							"name": "DemandaBronze"
+							"name": "RutasBronze"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "DS_DW_Silver_DemandaParadas",
+								"referenceName": "DS_DW_Silver_Rutas",
 								"type": "DatasetReference"
 							},
-							"name": "DestinoSilverDemanda"
+							"name": "DestinoSilverRutas"
 						}
 					],
 					"transformations": [
 						{
-							"name": "LimpiarTextoDemanda"
+							"name": "LimpiarTextoRutas"
 						},
 						{
-							"name": "ConvertirDatosDemanda"
+							"name": "ConvertirFechasRutas"
 						}
 					],
 					"scriptLines": [
 						"source(output(",
 						"          AnioFuente as string,",
-						"          DemandaId as string,",
-						"          FechaServicio as string,",
 						"          RutaHistoricaId as string,",
-						"          ParadaHistoricaId as string,",
-						"          Franja as string,",
-						"          ValidacionesTarjeta as string,",
-						"          Descensos as string,",
-						"          DemandaNoAtendida as string,",
-						"          Metodo as string,",
-						"          abordajes_manuales as string,",
-						"          estimacion_abordajes as string",
+						"          CodigoRuta as string,",
+						"          NombreRuta as string,",
+						"          Origen as string,",
+						"          Destino as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DemandaBronze",
-						"DemandaBronze derive(DemandaId = trim(DemandaId),",
-						"          RutaHistoricaId = trim(RutaHistoricaId),",
-						"          ParadaHistoricaId = trim(ParadaHistoricaId),",
-						"          Franja = upper(trim(Franja)),",
-						"          Metodo = upper(trim(Metodo))) ~> LimpiarTextoDemanda",
-						"LimpiarTextoDemanda derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) ),",
-						"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
-						"          Descensos = toInteger(Descensos),",
-						"          DemandaNoAtendida = toInteger(DemandaNoAtendida)) ~> ConvertirDatosDemanda",
-						"ConvertirDatosDemanda sink(allowSchemaDrift: true,",
+						"     format: 'table') ~> RutasBronze",
+						"RutasBronze derive(RutaHistoricaId = trim(RutaHistoricaId),",
+						"          CodigoRuta = trim(CodigoRuta),",
+						"          NombreRuta = trim(NombreRuta),",
+						"          Origen = trim(Origen),",
+						"          Destino = trim(Destino),",
+						"          Estado = upper(trim(Estado))) ~> LimpiarTextoRutas",
+						"LimpiarTextoRutas derive(VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
+						"          VigenciaHasta = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) )) ~> ConvertirFechasRutas",
+						"ConvertirFechasRutas sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     input(",
-						"          SilverId as long,",
-						"          DemandaId as string,",
-						"          FechaServicio as date,",
-						"          RutaHistoricaId as string,",
-						"          ParadaHistoricaId as string,",
-						"          Franja as string,",
-						"          ValidacionesTarjeta as integer,",
-						"          Descensos as integer,",
-						"          DemandaNoAtendida as integer,",
-						"          Metodo as string",
-						"     ),",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
@@ -3599,26 +3797,25 @@
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError',",
 						"     mapColumn(",
-						"          DemandaId,",
-						"          FechaServicio,",
 						"          RutaHistoricaId,",
-						"          ParadaHistoricaId,",
-						"          Franja,",
-						"          ValidacionesTarjeta,",
-						"          Descensos,",
-						"          DemandaNoAtendida,",
-						"          Metodo",
-						"     )) ~> DestinoSilverDemanda"
+						"          CodigoRuta,",
+						"          NombreRuta,",
+						"          Origen,",
+						"          Destino,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> DestinoSilverRutas"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_DemandaParadas')]",
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_DemandaParadas')]"
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Rutas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Rutas')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_DemandaParadas')]",
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Rutas')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3628,105 +3825,14 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "SilverId",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "DemandaId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "FechaServicio",
-						"type": "date"
-					},
-					{
-						"name": "RutaHistoricaId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "ParadaHistoricaId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Franja",
-						"type": "nvarchar"
-					},
-					{
-						"name": "ValidacionesTarjeta",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Descensos",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "DemandaNoAtendida",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "Metodo",
-						"type": "nvarchar"
-					}
-				],
+				"schema": [],
 				"typeProperties": {
 					"schema": "silver",
-					"table": "DemandaParadasAzure"
+					"table": "RutasAzure"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_DemandaParadas')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "EjecutarSilverDemanda",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Silver_DemandaParadas",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"DemandaBronze": {},
-									"DestinoSilverDemanda": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Silver_DemandaParadas')]"
 			]
 		}
 	]
