@@ -1,0 +1,16 @@
+{
+	"name": "DS_DW_Silver_Rutas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_DW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "silver",
+			"table": "RutasAzure"
+		}
+	}
+}
