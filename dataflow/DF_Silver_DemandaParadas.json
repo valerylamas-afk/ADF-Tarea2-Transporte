@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "LimpiarTextoDemanda"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          AnioFuente as string,",
@@ -32,7 +36,12 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> DemandaBronze"
+				"     format: 'table') ~> DemandaBronze",
+				"DemandaBronze derive(DemandaId = trim(DemandaId),",
+				"          RutaHistoricaId = trim(RutaHistoricaId),",
+				"          ParadaHistoricaId = trim(ParadaHistoricaId),",
+				"          Franja = upper(trim(Franja)),",
+				"          Metodo = upper(trim(Metodo))) ~> LimpiarTextoDemanda"
 			]
 		}
 	}
