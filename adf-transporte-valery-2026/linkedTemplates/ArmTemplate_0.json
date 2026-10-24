@@ -106,6 +106,68 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_DemandaParadas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "demanda_paradas.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "fec_servicio",
+						"type": "String"
+					},
+					{
+						"name": "cod_ruta",
+						"type": "String"
+					},
+					{
+						"name": "nro_parada",
+						"type": "String"
+					},
+					{
+						"name": "franja",
+						"type": "String"
+					},
+					{
+						"name": "abordajes_manuales",
+						"type": "String"
+					},
+					{
+						"name": "descensos_manuales",
+						"type": "String"
+					},
+					{
+						"name": "demanda_no_atendida",
+						"type": "String"
+					},
+					{
+						"name": "medicion",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_CSV_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -355,6 +417,76 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_DemandaParadas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "DemandaId",
+						"type": "varchar"
+					},
+					{
+						"name": "FechaServicio",
+						"type": "varchar"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "varchar"
+					},
+					{
+						"name": "ParadaHistoricaId",
+						"type": "varchar"
+					},
+					{
+						"name": "Franja",
+						"type": "varchar"
+					},
+					{
+						"name": "ValidacionesTarjeta",
+						"type": "varchar"
+					},
+					{
+						"name": "Descensos",
+						"type": "varchar"
+					},
+					{
+						"name": "DemandaNoAtendida",
+						"type": "varchar"
+					},
+					{
+						"name": "Metodo",
+						"type": "varchar"
+					},
+					{
+						"name": "abordajes_manuales",
+						"type": "varchar"
+					},
+					{
+						"name": "estimacion_abordajes",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "DemandaParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
 			]
 		},
 		{
@@ -1020,118 +1152,6 @@
 					},
 					{
 						"name": "destino",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Rutas2023')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Rutas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2023.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "cod_ruta",
-						"type": "String"
-					},
-					{
-						"name": "nombre_ruta",
-						"type": "String"
-					},
-					{
-						"name": "origen",
-						"type": "String"
-					},
-					{
-						"name": "destino",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Vehiculos2022')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Vehiculos",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_bus",
-						"type": "String"
-					},
-					{
-						"name": "placa",
-						"type": "String"
-					},
-					{
-						"name": "tipo_bus",
-						"type": "String"
-					},
-					{
-						"name": "capacidad",
 						"type": "String"
 					},
 					{
