@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "LimpiarTextoRutas"
+				},
+				{
+					"name": "ConvertirFechasRutas"
 				}
 			],
 			"scriptLines": [
@@ -39,7 +42,9 @@
 				"          NombreRuta = trim(NombreRuta),",
 				"          Origen = trim(Origen),",
 				"          Destino = trim(Destino),",
-				"          Estado = upper(trim(Estado))) ~> LimpiarTextoRutas"
+				"          Estado = upper(trim(Estado))) ~> LimpiarTextoRutas",
+				"LimpiarTextoRutas derive(VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
+				"          VigenciaHasta = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) )) ~> ConvertirFechasRutas"
 			]
 		}
 	}
