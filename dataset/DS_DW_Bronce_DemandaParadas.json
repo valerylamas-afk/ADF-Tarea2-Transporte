@@ -1,0 +1,65 @@
+{
+	"name": "DS_DW_Bronce_DemandaParadas",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureSQL_DW",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "AnioFuente",
+				"type": "varchar"
+			},
+			{
+				"name": "DemandaId",
+				"type": "varchar"
+			},
+			{
+				"name": "FechaServicio",
+				"type": "varchar"
+			},
+			{
+				"name": "RutaHistoricaId",
+				"type": "varchar"
+			},
+			{
+				"name": "ParadaHistoricaId",
+				"type": "varchar"
+			},
+			{
+				"name": "Franja",
+				"type": "varchar"
+			},
+			{
+				"name": "ValidacionesTarjeta",
+				"type": "varchar"
+			},
+			{
+				"name": "Descensos",
+				"type": "varchar"
+			},
+			{
+				"name": "DemandaNoAtendida",
+				"type": "varchar"
+			},
+			{
+				"name": "Metodo",
+				"type": "varchar"
+			},
+			{
+				"name": "abordajes_manuales",
+				"type": "varchar"
+			},
+			{
+				"name": "estimacion_abordajes",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "bronze",
+			"table": "DemandaParadasAzure"
+		}
+	}
+}
