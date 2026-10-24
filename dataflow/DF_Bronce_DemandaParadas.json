@@ -33,7 +33,15 @@
 					"name": "DemandaSQL"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Bronce_DemandaParadas",
+						"type": "DatasetReference"
+					},
+					"name": "DemandaBronzeDestino"
+				}
+			],
 			"transformations": [
 				{
 					"name": "SelectDemandaCSV"
@@ -173,7 +181,45 @@
 				"     skipDuplicateMapOutputs: true) ~> SelectDemandaSQL",
 				"SelectDemandaExcel2022, SelectDemandaExcel2023 union(byName: true)~> UnionDemandaExcel",
 				"UnionDemandaExcel, SelectDemandaCSV union(byName: true)~> UnionDemandaCSVExcel",
-				"UnionDemandaCSVExcel, SelectDemandaSQL union(byName: true)~> UnionBronceDemanda"
+				"UnionDemandaCSVExcel, SelectDemandaSQL union(byName: true)~> UnionBronceDemanda",
+				"UnionBronceDemanda sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          AnioFuente as string,",
+				"          DemandaId as string,",
+				"          FechaServicio as string,",
+				"          RutaHistoricaId as string,",
+				"          ParadaHistoricaId as string,",
+				"          Franja as string,",
+				"          ValidacionesTarjeta as string,",
+				"          Descensos as string,",
+				"          DemandaNoAtendida as string,",
+				"          Metodo as string,",
+				"          abordajes_manuales as string,",
+				"          estimacion_abordajes as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AnioFuente,",
+				"          DemandaId,",
+				"          FechaServicio,",
+				"          RutaHistoricaId,",
+				"          ParadaHistoricaId,",
+				"          Franja,",
+				"          ValidacionesTarjeta,",
+				"          Descensos,",
+				"          DemandaNoAtendida,",
+				"          Metodo,",
+				"          abordajes_manuales,",
+				"          estimacion_abordajes",
+				"     )) ~> DemandaBronzeDestino"
 			]
 		}
 	}
