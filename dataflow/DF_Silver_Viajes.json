@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "LimpiarTextoViajes"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          AnioFuente as string,",
@@ -31,7 +35,11 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> ViajesBronze"
+				"     format: 'table') ~> ViajesBronze",
+				"ViajesBronze derive(ViajeId = trim(ViajeId),",
+				"          RutaHistoricaId = trim(RutaHistoricaId),",
+				"          VehiculoId = trim(VehiculoId),",
+				"          EstadoViaje = upper(trim(EstadoViaje))) ~> LimpiarTextoViajes"
 			]
 		}
 	}
