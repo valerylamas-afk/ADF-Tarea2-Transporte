@@ -46,7 +46,9 @@
 				"LimpiarTextoViajes derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) ),",
 				"          HoraProgramada = toTimestamp(trim(HoraProgramada), 'HH:mm'),",
 				"          HoraSalida = toTimestamp(trim(HoraSalida), 'HH:mm'),",
-				"          HoraLlegada = toTimestamp(trim(HoraLlegada), 'HH:mm')) ~> ConvertirDatosViajes"
+				"          HoraLlegada = toTimestamp(trim(HoraLlegada), 'HH:mm'),",
+				"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
+				"          KmRecorridos = toDecimal(replace(trim(KmRecorridos), ',', '.'), 18, 2)) ~> ConvertirDatosViajes"
 			]
 		}
 	}
