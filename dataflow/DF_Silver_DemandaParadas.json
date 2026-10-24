@@ -12,7 +12,15 @@
 					"name": "DemandaBronze"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Silver_DemandaParadas",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoSilverDemanda"
+				}
+			],
 			"transformations": [
 				{
 					"name": "LimpiarTextoDemanda"
@@ -48,7 +56,40 @@
 				"LimpiarTextoDemanda derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) ),",
 				"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
 				"          Descensos = toInteger(Descensos),",
-				"          DemandaNoAtendida = toInteger(DemandaNoAtendida)) ~> ConvertirDatosDemanda"
+				"          DemandaNoAtendida = toInteger(DemandaNoAtendida)) ~> ConvertirDatosDemanda",
+				"ConvertirDatosDemanda sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SilverId as long,",
+				"          DemandaId as string,",
+				"          FechaServicio as date,",
+				"          RutaHistoricaId as string,",
+				"          ParadaHistoricaId as string,",
+				"          Franja as string,",
+				"          ValidacionesTarjeta as integer,",
+				"          Descensos as integer,",
+				"          DemandaNoAtendida as integer,",
+				"          Metodo as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          DemandaId,",
+				"          FechaServicio,",
+				"          RutaHistoricaId,",
+				"          ParadaHistoricaId,",
+				"          Franja,",
+				"          ValidacionesTarjeta,",
+				"          Descensos,",
+				"          DemandaNoAtendida,",
+				"          Metodo",
+				"     )) ~> DestinoSilverDemanda"
 			]
 		}
 	}
