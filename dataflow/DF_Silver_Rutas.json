@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "LimpiarTextoRutas"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          AnioFuente as string,",
@@ -29,7 +33,13 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> RutasBronze"
+				"     format: 'table') ~> RutasBronze",
+				"RutasBronze derive(RutaHistoricaId = trim(RutaHistoricaId),",
+				"          CodigoRuta = trim(CodigoRuta),",
+				"          NombreRuta = trim(NombreRuta),",
+				"          Origen = trim(Origen),",
+				"          Destino = trim(Destino),",
+				"          Estado = upper(trim(Estado))) ~> LimpiarTextoRutas"
 			]
 		}
 	}
