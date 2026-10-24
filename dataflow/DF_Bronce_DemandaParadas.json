@@ -24,6 +24,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "DemandaExcel2023"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_ERP_DemandaParadas",
+						"type": "DatasetReference"
+					},
+					"name": "DemandaSQL"
 				}
 			],
 			"sinks": [],
@@ -36,6 +43,15 @@
 				},
 				{
 					"name": "SelectDemandaExcel2023"
+				},
+				{
+					"name": "ConvertirTiposDemandaSQL"
+				},
+				{
+					"name": "SelectDemandaSQL"
+				},
+				{
+					"name": "UnionDemandaExcel"
 				}
 			],
 			"scriptLines": [
@@ -78,6 +94,22 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> DemandaExcel2023",
+				"source(output(",
+				"          AnioFuente as integer,",
+				"          DemandaId as string,",
+				"          FechaServicio as date,",
+				"          RutaHistoricaId as string,",
+				"          ParadaHistoricaId as string,",
+				"          Franja as string,",
+				"          ValidacionesTarjeta as integer,",
+				"          Descensos as integer,",
+				"          DemandaNoAtendida as integer,",
+				"          Metodo as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> DemandaSQL",
 				"DemandaCSV select(mapColumn(",
 				"          FechaServicio = fec_servicio,",
 				"          RutaHistoricaId = cod_ruta,",
@@ -113,7 +145,27 @@
 				"          Metodo = metodo",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> SelectDemandaExcel2023"
+				"     skipDuplicateMapOutputs: true) ~> SelectDemandaExcel2023",
+				"DemandaSQL derive(AnioFuente = toString(AnioFuente),",
+				"          FechaServicio = toString(FechaServicio),",
+				"          ValidacionesTarjeta = toString(ValidacionesTarjeta),",
+				"          Descensos = toString(Descensos),",
+				"          DemandaNoAtendida = toString(DemandaNoAtendida)) ~> ConvertirTiposDemandaSQL",
+				"ConvertirTiposDemandaSQL select(mapColumn(",
+				"          AnioFuente,",
+				"          DemandaId,",
+				"          FechaServicio,",
+				"          RutaHistoricaId,",
+				"          ParadaHistoricaId,",
+				"          Franja,",
+				"          ValidacionesTarjeta,",
+				"          Descensos,",
+				"          DemandaNoAtendida,",
+				"          Metodo",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectDemandaSQL",
+				"SelectDemandaExcel2022, SelectDemandaExcel2023 union(byName: true)~> UnionDemandaExcel"
 			]
 		}
 	}
