@@ -466,6 +466,52 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EjecutarSilverRutas",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Silver_Rutas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"RutasBronze": {},
+									"DestinoSilverRutas": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Rutas')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_CSV_DemandaParadas')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1216,6 +1262,27 @@
 				"typeProperties": {
 					"schema": "silver",
 					"table": "ParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "RutasAzure"
 				}
 			},
 			"dependsOn": [
@@ -3638,6 +3705,91 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Rutas",
+								"type": "DatasetReference"
+							},
+							"name": "RutasBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_Rutas",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoSilverRutas"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LimpiarTextoRutas"
+						},
+						{
+							"name": "ConvertirFechasRutas"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          RutaHistoricaId as string,",
+						"          CodigoRuta as string,",
+						"          NombreRuta as string,",
+						"          Origen as string,",
+						"          Destino as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> RutasBronze",
+						"RutasBronze derive(RutaHistoricaId = trim(RutaHistoricaId),",
+						"          CodigoRuta = trim(CodigoRuta),",
+						"          NombreRuta = trim(NombreRuta),",
+						"          Origen = trim(Origen),",
+						"          Destino = trim(Destino),",
+						"          Estado = upper(trim(Estado))) ~> LimpiarTextoRutas",
+						"LimpiarTextoRutas derive(VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
+						"          VigenciaHasta = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) )) ~> ConvertirFechasRutas",
+						"ConvertirFechasRutas sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          RutaHistoricaId,",
+						"          CodigoRuta,",
+						"          NombreRuta,",
+						"          Origen,",
+						"          Destino,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> DestinoSilverRutas"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Rutas')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Rutas')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_Silver_Vehiculos')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -3730,7 +3882,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DF_Silver_Rutas')]",
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Viajes')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3739,55 +3891,72 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "DS_DW_Bronce_Rutas",
+								"referenceName": "DS_DW_Bronce_Viajes",
 								"type": "DatasetReference"
 							},
-							"name": "RutasBronze"
+							"name": "ViajesBronze"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "DS_DW_Silver_Rutas",
+								"referenceName": "DS_DW_Silver_Viajes",
 								"type": "DatasetReference"
 							},
-							"name": "DestinoSilverRutas"
+							"name": "DestinoSilverViajes"
 						}
 					],
 					"transformations": [
 						{
-							"name": "LimpiarTextoRutas"
+							"name": "LimpiarTextoViajes"
 						},
 						{
-							"name": "ConvertirFechasRutas"
+							"name": "ConvertirDatosViajes"
 						}
 					],
 					"scriptLines": [
 						"source(output(",
 						"          AnioFuente as string,",
+						"          ViajeId as string,",
 						"          RutaHistoricaId as string,",
-						"          CodigoRuta as string,",
-						"          NombreRuta as string,",
-						"          Origen as string,",
-						"          Destino as string,",
-						"          VigenciaDesde as string,",
-						"          VigenciaHasta as string,",
-						"          Estado as string",
+						"          VehiculoId as string,",
+						"          FechaServicio as string,",
+						"          HoraProgramada as string,",
+						"          HoraSalida as string,",
+						"          HoraLlegada as string,",
+						"          ValidacionesTarjeta as string,",
+						"          KmRecorridos as string,",
+						"          EstadoViaje as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> RutasBronze",
-						"RutasBronze derive(RutaHistoricaId = trim(RutaHistoricaId),",
-						"          CodigoRuta = trim(CodigoRuta),",
-						"          NombreRuta = trim(NombreRuta),",
-						"          Origen = trim(Origen),",
-						"          Destino = trim(Destino),",
-						"          Estado = upper(trim(Estado))) ~> LimpiarTextoRutas",
-						"LimpiarTextoRutas derive(VigenciaDesde = iif(     isInteger(trim(VigenciaDesde)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaDesde))),     iif(         instr(trim(VigenciaDesde), '/') > 0,         toDate(trim(VigenciaDesde), 'dd/MM/yyyy'),         toDate(trim(VigenciaDesde), 'yyyy-MM-dd')     ) ),",
-						"          VigenciaHasta = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) )) ~> ConvertirFechasRutas",
-						"ConvertirFechasRutas sink(allowSchemaDrift: true,",
+						"     format: 'table') ~> ViajesBronze",
+						"ViajesBronze derive(ViajeId = trim(ViajeId),",
+						"          RutaHistoricaId = trim(RutaHistoricaId),",
+						"          VehiculoId = trim(VehiculoId),",
+						"          EstadoViaje = upper(trim(EstadoViaje))) ~> LimpiarTextoViajes",
+						"LimpiarTextoViajes derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) ),",
+						"          HoraProgramada = trim(HoraProgramada),",
+						"          HoraSalida = trim(HoraSalida),",
+						"          HoraLlegada = trim(HoraLlegada),",
+						"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
+						"          KmRecorridos = toDecimal(replace(trim(KmRecorridos), ',', '.'), 18, 2)) ~> ConvertirDatosViajes",
+						"ConvertirDatosViajes sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          ViajeId as string,",
+						"          RutaHistoricaId as string,",
+						"          VehiculoId as string,",
+						"          FechaServicio as date,",
+						"          HoraProgramada as timestamp,",
+						"          HoraSalida as timestamp,",
+						"          HoraLlegada as timestamp,",
+						"          ValidacionesTarjeta as integer,",
+						"          KmRecorridos as decimal(8,1),",
+						"          EstadoViaje as string",
+						"     ),",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
@@ -3797,25 +3966,27 @@
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError',",
 						"     mapColumn(",
+						"          ViajeId,",
 						"          RutaHistoricaId,",
-						"          CodigoRuta,",
-						"          NombreRuta,",
-						"          Origen,",
-						"          Destino,",
-						"          VigenciaDesde,",
-						"          VigenciaHasta,",
-						"          Estado",
-						"     )) ~> DestinoSilverRutas"
+						"          VehiculoId,",
+						"          FechaServicio,",
+						"          HoraProgramada,",
+						"          HoraSalida,",
+						"          HoraLlegada,",
+						"          ValidacionesTarjeta,",
+						"          KmRecorridos,",
+						"          EstadoViaje",
+						"     )) ~> DestinoSilverViajes"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Rutas')]",
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Rutas')]"
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Viajes')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Viajes')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Rutas')]",
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Viajes')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -3825,60 +3996,66 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [],
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "ViajeId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FechaServicio",
+						"type": "date"
+					},
+					{
+						"name": "HoraProgramada",
+						"type": "time",
+						"scale": 7
+					},
+					{
+						"name": "HoraSalida",
+						"type": "time",
+						"scale": 7
+					},
+					{
+						"name": "HoraLlegada",
+						"type": "time",
+						"scale": 7
+					},
+					{
+						"name": "ValidacionesTarjeta",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "KmRecorridos",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 1
+					},
+					{
+						"name": "EstadoViaje",
+						"type": "nvarchar"
+					}
+				],
 				"typeProperties": {
 					"schema": "silver",
-					"table": "RutasAzure"
+					"table": "ViajesAzure"
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_Rutas')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "EjecutarSilverRutas",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Silver_Rutas",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"RutasBronze": {},
-									"DestinoSilverRutas": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Rutas')]"
 			]
 		}
 	]

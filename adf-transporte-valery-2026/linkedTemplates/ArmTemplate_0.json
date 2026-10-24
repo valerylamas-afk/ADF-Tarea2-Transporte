@@ -863,6 +863,27 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Rutas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "RutasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Vehiculos')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1078,66 +1099,6 @@
 					"location": {
 						"type": "AzureBlobStorageLocation",
 						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_parada",
-						"type": "String"
-					},
-					{
-						"name": "nombre_parada",
-						"type": "String"
-					},
-					{
-						"name": "zona",
-						"type": "String"
-					},
-					{
-						"name": "latitud",
-						"type": "String"
-					},
-					{
-						"name": "longitud",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Paradas2023')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Paradas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2023.xlsx",
 						"folderPath": "datos_xls",
 						"container": "raw"
 					},

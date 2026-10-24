@@ -95,6 +95,196 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Vehiculos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_Vehiculos",
+								"type": "DatasetReference"
+							},
+							"name": "VehiculosSilver"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LimpiarTextoVehiculos"
+						},
+						{
+							"name": "ConvertirDatosVehiculos"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as string,",
+						"          VigenciaDesde as string,",
+						"          VigenciaHasta as string,",
+						"          Estado as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> VehiculosBronze",
+						"VehiculosBronze derive(VehiculoId = trim(VehiculoId),",
+						"          Placa = upper(trim(Placa)),",
+						"          TipoVehiculo = upper(trim(TipoVehiculo)),",
+						"          Estado = upper(trim(Estado))) ~> LimpiarTextoVehiculos",
+						"LimpiarTextoVehiculos derive(CapacidadEfectiva = toInteger(trim(CapacidadEfectiva)),",
+						"          VigenciaDesde = iif(     isInteger(trim(VigenciaHasta)),     addDays(toDate('1899-12-30'), toInteger(trim(VigenciaHasta))),     iif(         instr(trim(VigenciaHasta), '/') > 0,         toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),         toDate(trim(VigenciaHasta), 'yyyy-MM-dd')     ) ),",
+						"          VigenciaHasta = iif(     instr(trim(VigenciaHasta), '/') > 0,     toDate(trim(VigenciaHasta), 'dd/MM/yyyy'),     toDate(trim(VigenciaHasta), 'yyyy-MM-dd') )) ~> ConvertirDatosVehiculos",
+						"ConvertirDatosVehiculos sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          VehiculoId as string,",
+						"          Placa as string,",
+						"          TipoVehiculo as string,",
+						"          CapacidadEfectiva as integer,",
+						"          VigenciaDesde as date,",
+						"          VigenciaHasta as date,",
+						"          Estado as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          VehiculoId,",
+						"          Placa,",
+						"          TipoVehiculo,",
+						"          CapacidadEfectiva,",
+						"          VigenciaDesde,",
+						"          VigenciaHasta,",
+						"          Estado",
+						"     )) ~> VehiculosSilver"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Viajes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Viajes",
+								"type": "DatasetReference"
+							},
+							"name": "ViajesBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_Viajes",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoSilverViajes"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LimpiarTextoViajes"
+						},
+						{
+							"name": "ConvertirDatosViajes"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          ViajeId as string,",
+						"          RutaHistoricaId as string,",
+						"          VehiculoId as string,",
+						"          FechaServicio as string,",
+						"          HoraProgramada as string,",
+						"          HoraSalida as string,",
+						"          HoraLlegada as string,",
+						"          ValidacionesTarjeta as string,",
+						"          KmRecorridos as string,",
+						"          EstadoViaje as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> ViajesBronze",
+						"ViajesBronze derive(ViajeId = trim(ViajeId),",
+						"          RutaHistoricaId = trim(RutaHistoricaId),",
+						"          VehiculoId = trim(VehiculoId),",
+						"          EstadoViaje = upper(trim(EstadoViaje))) ~> LimpiarTextoViajes",
+						"LimpiarTextoViajes derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) ),",
+						"          HoraProgramada = trim(HoraProgramada),",
+						"          HoraSalida = trim(HoraSalida),",
+						"          HoraLlegada = trim(HoraLlegada),",
+						"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
+						"          KmRecorridos = toDecimal(replace(trim(KmRecorridos), ',', '.'), 18, 2)) ~> ConvertirDatosViajes",
+						"ConvertirDatosViajes sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          ViajeId as string,",
+						"          RutaHistoricaId as string,",
+						"          VehiculoId as string,",
+						"          FechaServicio as date,",
+						"          HoraProgramada as timestamp,",
+						"          HoraSalida as timestamp,",
+						"          HoraLlegada as timestamp,",
+						"          ValidacionesTarjeta as integer,",
+						"          KmRecorridos as decimal(8,1),",
+						"          EstadoViaje as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ViajeId,",
+						"          RutaHistoricaId,",
+						"          VehiculoId,",
+						"          FechaServicio,",
+						"          HoraProgramada,",
+						"          HoraSalida,",
+						"          HoraLlegada,",
+						"          ValidacionesTarjeta,",
+						"          KmRecorridos,",
+						"          EstadoViaje",
+						"     )) ~> DestinoSilverViajes"
+					]
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -404,7 +594,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Vehiculos')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_DemandaParadas')]",
