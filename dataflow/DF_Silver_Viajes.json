@@ -12,7 +12,15 @@
 					"name": "ViajesBronze"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Silver_Viajes",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoSilverViajes"
+				}
+			],
 			"transformations": [
 				{
 					"name": "LimpiarTextoViajes"
@@ -48,7 +56,42 @@
 				"          HoraSalida = toTimestamp(trim(HoraSalida), 'HH:mm'),",
 				"          HoraLlegada = toTimestamp(trim(HoraLlegada), 'HH:mm'),",
 				"          ValidacionesTarjeta = toInteger(ValidacionesTarjeta),",
-				"          KmRecorridos = toDecimal(replace(trim(KmRecorridos), ',', '.'), 18, 2)) ~> ConvertirDatosViajes"
+				"          KmRecorridos = toDecimal(replace(trim(KmRecorridos), ',', '.'), 18, 2)) ~> ConvertirDatosViajes",
+				"ConvertirDatosViajes sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SilverId as long,",
+				"          ViajeId as string,",
+				"          RutaHistoricaId as string,",
+				"          VehiculoId as string,",
+				"          FechaServicio as date,",
+				"          HoraProgramada as timestamp,",
+				"          HoraSalida as timestamp,",
+				"          HoraLlegada as timestamp,",
+				"          ValidacionesTarjeta as integer,",
+				"          KmRecorridos as decimal(8,1),",
+				"          EstadoViaje as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          ViajeId,",
+				"          RutaHistoricaId,",
+				"          VehiculoId,",
+				"          FechaServicio,",
+				"          HoraProgramada,",
+				"          HoraSalida,",
+				"          HoraLlegada,",
+				"          ValidacionesTarjeta,",
+				"          KmRecorridos,",
+				"          EstadoViaje",
+				"     )) ~> DestinoSilverViajes"
 			]
 		}
 	}
