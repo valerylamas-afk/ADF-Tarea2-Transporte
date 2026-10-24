@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "LimpiarTextoViajes"
+				},
+				{
+					"name": "ConvertirDatosViajes"
 				}
 			],
 			"scriptLines": [
@@ -39,7 +42,8 @@
 				"ViajesBronze derive(ViajeId = trim(ViajeId),",
 				"          RutaHistoricaId = trim(RutaHistoricaId),",
 				"          VehiculoId = trim(VehiculoId),",
-				"          EstadoViaje = upper(trim(EstadoViaje))) ~> LimpiarTextoViajes"
+				"          EstadoViaje = upper(trim(EstadoViaje))) ~> LimpiarTextoViajes",
+				"LimpiarTextoViajes derive(FechaServicio = iif(     isInteger(trim(FechaServicio)),     addDays(toDate('1899-12-30'), toInteger(trim(FechaServicio))),     iif(         instr(trim(FechaServicio), '/') > 0,         toDate(trim(FechaServicio), 'dd/MM/yyyy'),         toDate(trim(FechaServicio), 'yyyy-MM-dd')     ) )) ~> ConvertirDatosViajes"
 			]
 		}
 	}
