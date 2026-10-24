@@ -1,0 +1,55 @@
+{
+	"name": "DS_XLS_DemandaParadas_2023",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Demanda_Paradas",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "operacion_2023.xlsx",
+				"folderPath": "datos_xls",
+				"container": "raw"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "fecha_servicio",
+				"type": "String"
+			},
+			{
+				"name": "cod_ruta",
+				"type": "String"
+			},
+			{
+				"name": "nro_parada",
+				"type": "String"
+			},
+			{
+				"name": "franja",
+				"type": "String"
+			},
+			{
+				"name": "estimacion_abordajes",
+				"type": "String"
+			},
+			{
+				"name": "estimacion_descensos",
+				"type": "String"
+			},
+			{
+				"name": "demanda_no_atendida",
+				"type": "String"
+			},
+			{
+				"name": "metodo",
+				"type": "String"
+			}
+		]
+	}
+}
