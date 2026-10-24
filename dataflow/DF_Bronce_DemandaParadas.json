@@ -55,6 +55,9 @@
 				},
 				{
 					"name": "UnionDemandaCSVExcel"
+				},
+				{
+					"name": "UnionBronceDemanda"
 				}
 			],
 			"scriptLines": [
@@ -169,7 +172,8 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SelectDemandaSQL",
 				"SelectDemandaExcel2022, SelectDemandaExcel2023 union(byName: true)~> UnionDemandaExcel",
-				"UnionDemandaExcel, SelectDemandaCSV union(byName: true)~> UnionDemandaCSVExcel"
+				"UnionDemandaExcel, SelectDemandaCSV union(byName: true)~> UnionDemandaCSVExcel",
+				"UnionDemandaCSVExcel, SelectDemandaSQL union(byName: true)~> UnionBronceDemanda"
 			]
 		}
 	}
