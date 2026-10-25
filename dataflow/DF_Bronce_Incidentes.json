@@ -78,9 +78,6 @@
 				},
 				{
 					"name": "PrepararRelacionesIncidentes"
-				},
-				{
-					"name": "FiltrarRutasAfectadas"
 				}
 			],
 			"scriptLines": [
@@ -231,7 +228,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> PrepararRelacionesIncidentes",
-				"PrepararRelacionesIncidentes filter(!isNull(rutas_afectadas) && trim(rutas_afectadas) != '') ~> FiltrarRutasAfectadas",
 				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
