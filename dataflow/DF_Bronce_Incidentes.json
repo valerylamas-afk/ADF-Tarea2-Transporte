@@ -26,6 +26,9 @@
 				},
 				{
 					"name": "PrepararFechasCSV"
+				},
+				{
+					"name": "PrepararIncidentesExcel2022"
 				}
 			],
 			"scriptLines": [
@@ -79,7 +82,22 @@
 				"PrepararIncidentesCSV derive(FechaHoraInicio = concat(trim(fecha_inicio), ' ', trim(hora_inicio)),",
 				"          FechaHoraFin = concat(trim(fecha_fin), ' ', trim(hora_fin)),",
 				"          FechaHoraRegistro = trim(fecha_registro),",
-				"          AnioFuente = substring(trim(fecha_inicio), 7, 4)) ~> PrepararFechasCSV"
+				"          AnioFuente = substring(trim(fecha_inicio), 7, 4)) ~> PrepararFechasCSV",
+				"IncidentesExcel2022 select(mapColumn(",
+				"          IncidenteId = id_incidente,",
+				"          TipoIncidente = tipo,",
+				"          Severidad = severidad,",
+				"          fecha_inicio,",
+				"          hora_inicio,",
+				"          fecha_fin,",
+				"          hora_fin,",
+				"          fecha_registro,",
+				"          rutas_afectadas,",
+				"          VehiculoId = vehiculo_afectado,",
+				"          Descripcion = descripcion",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesExcel2022"
 			]
 		}
 	}
