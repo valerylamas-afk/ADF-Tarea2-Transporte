@@ -1,0 +1,69 @@
+{
+	"name": "DS_CSV_Incidentes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_AzureBlobStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "incidentes.csv",
+				"folderPath": "datos_csv",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id_incidente",
+				"type": "String"
+			},
+			{
+				"name": "tipo",
+				"type": "String"
+			},
+			{
+				"name": "severidad",
+				"type": "String"
+			},
+			{
+				"name": "fecha_inicio",
+				"type": "String"
+			},
+			{
+				"name": "hora_inicio",
+				"type": "String"
+			},
+			{
+				"name": "fecha_fin",
+				"type": "String"
+			},
+			{
+				"name": "hora_fin",
+				"type": "String"
+			},
+			{
+				"name": "fecha_registro",
+				"type": "String"
+			},
+			{
+				"name": "rutas_afectadas",
+				"type": "String"
+			},
+			{
+				"name": "vehiculo_afectado",
+				"type": "String"
+			},
+			{
+				"name": "descripcion",
+				"type": "String"
+			}
+		]
+	}
+}
