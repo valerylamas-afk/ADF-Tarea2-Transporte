@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "LimpiarTextoIncidentes"
+				},
+				{
+					"name": "ConvertirFechasIncidentes"
 				}
 			],
 			"scriptLines": [
@@ -38,7 +41,8 @@
 				"          TipoIncidente = upper(trim(TipoIncidente)),",
 				"          Severidad = upper(trim(Severidad)),",
 				"          VehiculoId = trim(VehiculoId),",
-				"          Descripcion = trim(Descripcion)) ~> LimpiarTextoIncidentes"
+				"          Descripcion = trim(Descripcion)) ~> LimpiarTextoIncidentes",
+				"LimpiarTextoIncidentes derive(FechaHoraInicio = iif(     instr(FechaHoraInicio, '1899-12-31T') > 0,     toTimestamp(         concat(substring(FechaHoraInicio, 1, 10), ' ',                substring(FechaHoraInicio, 23, 8)),         'yyyy-MM-dd HH:mm:ss'     ),     iif(         instr(FechaHoraInicio, '/') > 0,         toTimestamp(FechaHoraInicio, 'dd/MM/yyyy HH:mm'),         iif(             length(trim(FechaHoraInicio)) == 16,             toTimestamp(FechaHoraInicio, 'yyyy-MM-dd HH:mm'),             toTimestamp(FechaHoraInicio, 'yyyy-MM-dd HH:mm:ss')         )     ) )) ~> ConvertirFechasIncidentes"
 			]
 		}
 	}
