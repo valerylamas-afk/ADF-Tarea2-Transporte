@@ -1,0 +1,31 @@
+{
+	"name": "DF_Bronce_IncidenteRuta",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_ERP_IncidenteRuta",
+						"type": "DatasetReference"
+					},
+					"name": "IncidenteRutaERP"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          AnioFuente as integer,",
+				"          IncidenteId as string,",
+				"          RutaHistoricaId as string,",
+				"          EsPrincipal as boolean",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> IncidenteRutaERP"
+			]
+		}
+	}
+}
