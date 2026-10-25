@@ -50,6 +50,43 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_IncidenteRuta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "IncidenteId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EsPrincipal",
+						"type": "bit"
+					}
+				],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "IncidenteRutaAzure"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_Bronce_DemandaParadas')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -2050,6 +2087,12 @@
 						"     format: 'table') ~> IncidenteRutaERP",
 						"IncidenteRutaERP sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
+						"     input(",
+						"          AnioFuente as string,",
+						"          IncidenteId as string,",
+						"          RutaHistoricaId as string,",
+						"          EsPrincipal as string",
+						"     ),",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
@@ -2069,6 +2112,76 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_SQL_ERP_IncidenteRuta')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_IncidenteRuta')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_IncidenteRuta",
+								"type": "DatasetReference"
+							},
+							"name": "IncidenteRutaBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_IncidenteRuta",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoSilverIncidenteRuta"
+						}
+					],
+					"transformations": [
+						{
+							"name": "ConvertirTiposIncidenteRuta"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          IncidenteId as string,",
+						"          RutaHistoricaId as string,",
+						"          EsPrincipal as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> IncidenteRutaBronze",
+						"IncidenteRutaBronze derive(EsPrincipal = toBoolean(EsPrincipal)) ~> ConvertirTiposIncidenteRuta",
+						"ConvertirTiposIncidenteRuta sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          IncidenteId as string,",
+						"          RutaHistoricaId as string,",
+						"          EsPrincipal as boolean",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          IncidenteId,",
+						"          RutaHistoricaId,",
+						"          EsPrincipal",
+						"     )) ~> DestinoSilverIncidenteRuta"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_IncidenteRuta')]"
 			]
 		},
 		{
@@ -2299,104 +2412,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Paradas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Rutas')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Ejecutar_Bronze_Rutas",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_Rutas",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"RutasCSV": {},
-									"RutasExcel2022": {},
-									"RutasExcel2023": {},
-									"RutasSQL": {},
-									"SinkBronceRutas": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Rutas')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Vehiculos')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Ejecutar_Bronze_Vehiculos",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_Vehiculos",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"VehiculosCSV": {},
-									"VehiculosExcel2022": {},
-									"VehiculosExcel2023": {},
-									"VehiculosSQL": {},
-									"SinkBronceVehiculos": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Vehiculos')]"
 			]
 		}
 	]
