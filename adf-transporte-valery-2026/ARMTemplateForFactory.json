@@ -5080,6 +5080,52 @@
 				"[concat(variables('factoryId'), '/datasets/DS_SQL_ERP_IncidenteRuta')]",
 				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_IncidenteRuta')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_IncidenteRuta')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EjecutarBronzeIncidenteRuta",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_IncidenteRuta",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"IncidenteRutaERP": {},
+									"DestinoBronzeIncidenteRuta": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_IncidenteRuta')]"
+			]
 		}
 	]
 }
