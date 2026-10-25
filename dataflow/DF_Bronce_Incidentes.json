@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "IncidentesExcel2022"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_XLS_Incidentes_2023",
+						"type": "DatasetReference"
+					},
+					"name": "IncidentesExcel2023"
 				}
 			],
 			"sinks": [],
@@ -29,6 +36,12 @@
 				},
 				{
 					"name": "PrepararIncidentesExcel2022"
+				},
+				{
+					"name": "PrepararFechasExcel2022"
+				},
+				{
+					"name": "PrepararIncidentesExcel2023"
 				}
 			],
 			"scriptLines": [
@@ -64,6 +77,22 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> IncidentesExcel2022",
+				"source(output(",
+				"          id_incidente as string,",
+				"          tipo as string,",
+				"          severidad as string,",
+				"          fecha_inicio as string,",
+				"          hora_inicio as string,",
+				"          fecha_fin as string,",
+				"          hora_fin as string,",
+				"          fecha_registro as string,",
+				"          rutas_afectadas as string,",
+				"          vehiculo_afectado as string,",
+				"          descripcion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> IncidentesExcel2023",
 				"IncidentesCSV select(mapColumn(",
 				"          IncidenteId = id_incidente,",
 				"          TipoIncidente = tipo,",
@@ -97,7 +126,26 @@
 				"          Descripcion = descripcion",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesExcel2022"
+				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesExcel2022",
+				"PrepararIncidentesExcel2022 derive(FechaHoraInicio = concat(trim(fecha_inicio), ' ', trim(hora_inicio)),",
+				"          FechaHoraFin = concat(trim(fecha_fin), ' ', trim(hora_fin)),",
+				"          FechaHoraRegistro = trim(fecha_registro),",
+				"          AnioFuente = '2022') ~> PrepararFechasExcel2022",
+				"IncidentesExcel2023 select(mapColumn(",
+				"          IncidenteId = id_incidente,",
+				"          IncidenteId = tipo,",
+				"          Severidad = severidad,",
+				"          fecha_inicio,",
+				"          hora_inicio,",
+				"          fecha_fin,",
+				"          hora_fin,",
+				"          fecha_registro,",
+				"          rutas_afectadas,",
+				"          VehiculoId = vehiculo_afectado,",
+				"          Descripcion = descripcion",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesExcel2023"
 			]
 		}
 	}
