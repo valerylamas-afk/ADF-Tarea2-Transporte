@@ -61,6 +61,9 @@
 				},
 				{
 					"name": "UnionIncidentes2023"
+				},
+				{
+					"name": "UnionIncidentesERP"
 				}
 			],
 			"scriptLines": [
@@ -189,7 +192,8 @@
 				"          FechaHoraFin = toString(FechaHoraFin, 'yyyy-MM-dd HH:mm:ss'),",
 				"          FechaHoraRegistro = toString(FechaHoraRegistro, 'yyyy-MM-dd HH:mm:ss')) ~> PrepararIncidentesERP",
 				"PrepararFechasCSV, PrepararFechasExcel2022 union(byName: true)~> UnionIncidentes2022",
-				"UnionIncidentes2022, PrepararFechasExcel2023 union(byName: true)~> UnionIncidentes2023"
+				"UnionIncidentes2022, PrepararFechasExcel2023 union(byName: true)~> UnionIncidentes2023",
+				"UnionIncidentes2023, PrepararIncidentesERP union(byName: true)~> UnionIncidentesERP"
 			]
 		}
 	}
