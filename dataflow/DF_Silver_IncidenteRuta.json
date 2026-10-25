@@ -12,7 +12,15 @@
 					"name": "IncidenteRutaBronze"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Silver_IncidenteRuta",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoSilverIncidenteRuta"
+				}
+			],
 			"transformations": [
 				{
 					"name": "ConvertirTiposIncidenteRuta"
@@ -29,7 +37,28 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> IncidenteRutaBronze",
-				"IncidenteRutaBronze derive(EsPrincipal = toBoolean(EsPrincipal)) ~> ConvertirTiposIncidenteRuta"
+				"IncidenteRutaBronze derive(EsPrincipal = toBoolean(EsPrincipal)) ~> ConvertirTiposIncidenteRuta",
+				"ConvertirTiposIncidenteRuta sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          SilverId as long,",
+				"          IncidenteId as string,",
+				"          RutaHistoricaId as string,",
+				"          EsPrincipal as boolean",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          IncidenteId,",
+				"          RutaHistoricaId,",
+				"          EsPrincipal",
+				"     )) ~> DestinoSilverIncidenteRuta"
 			]
 		}
 	}
