@@ -16,6 +16,9 @@
 			"transformations": [
 				{
 					"name": "PrepararIncidentesCSV"
+				},
+				{
+					"name": "PrepararFechasCSV"
 				}
 			],
 			"scriptLines": [
@@ -49,7 +52,10 @@
 				"          Descripcion = descripcion",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesCSV"
+				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesCSV",
+				"PrepararIncidentesCSV derive(FechaHoraInicio = concat(trim(fecha_inicio), ' ', trim(hora_inicio)),",
+				"          FechaHoraFin = concat(trim(fecha_fin), ' ', trim(hora_fin)),",
+				"          FechaHoraRegistro = trim(fecha_registro)) ~> PrepararFechasCSV"
 			]
 		}
 	}
