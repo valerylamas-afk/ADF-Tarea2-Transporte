@@ -33,7 +33,15 @@
 					"name": "IncidentesERP"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Bronce_Incidentes",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoBronzeIncidentes"
+				}
+			],
 			"transformations": [
 				{
 					"name": "PrepararIncidentesCSV"
@@ -64,6 +72,9 @@
 				},
 				{
 					"name": "UnionIncidentesERP"
+				},
+				{
+					"name": "SeleccionarColumnasIncidentes"
 				}
 			],
 			"scriptLines": [
@@ -193,7 +204,52 @@
 				"          FechaHoraRegistro = toString(FechaHoraRegistro, 'yyyy-MM-dd HH:mm:ss')) ~> PrepararIncidentesERP",
 				"PrepararFechasCSV, PrepararFechasExcel2022 union(byName: true)~> UnionIncidentes2022",
 				"UnionIncidentes2022, PrepararFechasExcel2023 union(byName: true)~> UnionIncidentes2023",
-				"UnionIncidentes2023, PrepararIncidentesERP union(byName: true)~> UnionIncidentesERP"
+				"UnionIncidentes2023, PrepararIncidentesERP union(byName: true)~> UnionIncidentesERP",
+				"UnionIncidentesERP select(mapColumn(",
+				"          IncidenteId,",
+				"          TipoIncidente,",
+				"          Severidad,",
+				"          VehiculoId,",
+				"          Descripcion,",
+				"          FechaHoraInicio,",
+				"          FechaHoraFin,",
+				"          FechaHoraRegistro,",
+				"          AnioFuente",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SeleccionarColumnasIncidentes",
+				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          AnioFuente as string,",
+				"          IncidenteId as string,",
+				"          TipoIncidente as string,",
+				"          Severidad as string,",
+				"          FechaHoraInicio as string,",
+				"          FechaHoraFin as string,",
+				"          FechaHoraRegistro as string,",
+				"          VehiculoId as string,",
+				"          Descripcion as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AnioFuente,",
+				"          IncidenteId,",
+				"          TipoIncidente,",
+				"          Severidad,",
+				"          FechaHoraInicio,",
+				"          FechaHoraFin,",
+				"          FechaHoraRegistro,",
+				"          VehiculoId,",
+				"          Descripcion",
+				"     )) ~> DestinoBronzeIncidentes"
 			]
 		}
 	}
