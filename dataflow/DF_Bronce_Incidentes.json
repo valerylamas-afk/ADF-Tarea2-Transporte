@@ -87,6 +87,9 @@
 				},
 				{
 					"name": "AplanarRutas"
+				},
+				{
+					"name": "SeleccionarRelacionesRutas"
 				}
 			],
 			"scriptLines": [
@@ -248,6 +251,13 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> AplanarRutas",
+				"AplanarRutas select(mapColumn(",
+				"          IncidenteId,",
+				"          AnioFuente,",
+				"          ListaRutas",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SeleccionarRelacionesRutas",
 				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
