@@ -55,6 +55,9 @@
 				},
 				{
 					"name": "PrepararIncidentesERP"
+				},
+				{
+					"name": "UnionIncidentes2022"
 				}
 			],
 			"scriptLines": [
@@ -181,7 +184,8 @@
 				"IncidentesERP derive(AnioFuente = toString(AnioFuente),",
 				"          FechaHoraInicio = toString(FechaHoraInicio, 'yyyy-MM-dd HH:mm:ss'),",
 				"          FechaHoraFin = toString(FechaHoraFin, 'yyyy-MM-dd HH:mm:ss'),",
-				"          FechaHoraRegistro = toString(FechaHoraRegistro, 'yyyy-MM-dd HH:mm:ss')) ~> PrepararIncidentesERP"
+				"          FechaHoraRegistro = toString(FechaHoraRegistro, 'yyyy-MM-dd HH:mm:ss')) ~> PrepararIncidentesERP",
+				"PrepararFechasCSV, PrepararFechasExcel2022 union(byName: true)~> UnionIncidentes2022"
 			]
 		}
 	}
