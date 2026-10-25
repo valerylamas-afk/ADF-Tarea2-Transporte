@@ -90,6 +90,9 @@
 				},
 				{
 					"name": "SeleccionarRelacionesRutas"
+				},
+				{
+					"name": "PrepararEsPrincipal"
 				}
 			],
 			"scriptLines": [
@@ -258,6 +261,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SeleccionarRelacionesRutas",
+				"SeleccionarRelacionesRutas derive(EsPrincipal = toString(null())) ~> PrepararEsPrincipal",
 				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
