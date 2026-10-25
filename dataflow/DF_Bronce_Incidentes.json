@@ -75,6 +75,9 @@
 				},
 				{
 					"name": "SeleccionarColumnasIncidentes"
+				},
+				{
+					"name": "PrepararRelacionesIncidentes"
 				}
 			],
 			"scriptLines": [
@@ -205,7 +208,7 @@
 				"PrepararFechasCSV, PrepararFechasExcel2022 union(byName: true)~> UnionIncidentes2022",
 				"UnionIncidentes2022, PrepararFechasExcel2023 union(byName: true)~> UnionIncidentes2023",
 				"UnionIncidentes2023, PrepararIncidentesERP union(byName: true)~> UnionIncidentesERP",
-				"UnionIncidentesERP select(mapColumn(",
+				"PrepararRelacionesIncidentes select(mapColumn(",
 				"          IncidenteId,",
 				"          TipoIncidente,",
 				"          Severidad,",
@@ -218,6 +221,13 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SeleccionarColumnasIncidentes",
+				"UnionIncidentesERP select(mapColumn(",
+				"          IncidenteId,",
+				"          rutas_afectadas,",
+				"          AnioFuente",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> PrepararRelacionesIncidentes",
 				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
