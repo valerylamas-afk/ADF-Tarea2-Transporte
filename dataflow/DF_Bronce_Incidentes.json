@@ -24,6 +24,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "IncidentesExcel2023"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_SQL_ERP_Incidentes",
+						"type": "DatasetReference"
+					},
+					"name": "IncidentesERP"
 				}
 			],
 			"sinks": [],
@@ -96,6 +103,21 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> IncidentesExcel2023",
+				"source(output(",
+				"          AnioFuente as integer,",
+				"          IncidenteId as string,",
+				"          TipoIncidente as string,",
+				"          Severidad as string,",
+				"          FechaHoraInicio as timestamp,",
+				"          FechaHoraFin as timestamp,",
+				"          FechaHoraRegistro as timestamp,",
+				"          VehiculoId as string,",
+				"          Descripcion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> IncidentesERP",
 				"IncidentesCSV select(mapColumn(",
 				"          IncidenteId = id_incidente,",
 				"          TipoIncidente = tipo,",
