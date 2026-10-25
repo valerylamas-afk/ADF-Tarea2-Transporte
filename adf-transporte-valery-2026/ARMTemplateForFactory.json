@@ -181,6 +181,55 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EjecutarBronzeIncidentes",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Bronce_Incidentes",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"IncidentesCSV": {},
+									"IncidentesExcel2022": {},
+									"IncidentesExcel2023": {},
+									"IncidentesERP": {},
+									"DestinoBronzeIncidentes": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Incidentes')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -417,6 +466,52 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/DF_Silver_DemandaParadas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "EjecutarSilverIncidentes",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "DF_Silver_Incidentes",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"IncidentesBronze": {},
+									"DestinoSilverIncidentes": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Incidentes')]"
 			]
 		},
 		{
@@ -1016,6 +1111,27 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_IncidenteRuta')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "IncidenteRutaAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Incidentes')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -1373,6 +1489,68 @@
 				"typeProperties": {
 					"schema": "silver",
 					"table": "DemandaParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "IncidenteId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TipoIncidente",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Severidad",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FechaHoraInicio",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "FechaHoraFin",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "FechaHoraRegistro",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Descripcion",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "silver",
+					"table": "IncidentesAzure"
 				}
 			},
 			"dependsOn": [
@@ -4328,6 +4506,102 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DF_Silver_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Bronce_Incidentes",
+								"type": "DatasetReference"
+							},
+							"name": "IncidentesBronze"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "DS_DW_Silver_Incidentes",
+								"type": "DatasetReference"
+							},
+							"name": "DestinoSilverIncidentes"
+						}
+					],
+					"transformations": [
+						{
+							"name": "LimpiarTextoIncidentes"
+						},
+						{
+							"name": "ConvertirFechasIncidentes"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          AnioFuente as string,",
+						"          IncidenteId as string,",
+						"          TipoIncidente as string,",
+						"          Severidad as string,",
+						"          FechaHoraInicio as string,",
+						"          FechaHoraFin as string,",
+						"          FechaHoraRegistro as string,",
+						"          VehiculoId as string,",
+						"          Descripcion as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> IncidentesBronze",
+						"IncidentesBronze derive(IncidenteId = trim(IncidenteId),",
+						"          TipoIncidente = upper(trim(TipoIncidente)),",
+						"          Severidad = upper(trim(Severidad)),",
+						"          VehiculoId = trim(VehiculoId),",
+						"          Descripcion = trim(Descripcion)) ~> LimpiarTextoIncidentes",
+						"LimpiarTextoIncidentes derive(FechaHoraInicio = iif(     instr(FechaHoraInicio, '1899-12-31T') > 0,     toTimestamp(         concat(substring(FechaHoraInicio, 1, 10), ' ',                substring(FechaHoraInicio, 23, 8)),         'yyyy-MM-dd HH:mm:ss'     ),     iif(         instr(FechaHoraInicio, '/') > 0,         toTimestamp(FechaHoraInicio, 'dd/MM/yyyy HH:mm'),         iif(             length(trim(FechaHoraInicio)) == 16,             toTimestamp(FechaHoraInicio, 'yyyy-MM-dd HH:mm'),             toTimestamp(FechaHoraInicio, 'yyyy-MM-dd HH:mm:ss')         )     ) ),",
+						"          FechaHoraFin = iif(     instr(FechaHoraFin, '1899-12-31T') > 0,     toTimestamp(         concat(             substring(FechaHoraFin, 1, 10),             ' ',             substring(FechaHoraFin, 23, 8)         ),         'yyyy-MM-dd HH:mm:ss'     ),     iif(         instr(FechaHoraFin, '/') > 0,         toTimestamp(FechaHoraFin, 'dd/MM/yyyy HH:mm'),         iif(             length(trim(FechaHoraFin)) == 16,             toTimestamp(FechaHoraFin, 'yyyy-MM-dd HH:mm'),             toTimestamp(FechaHoraFin, 'yyyy-MM-dd HH:mm:ss')         )     ) ),",
+						"          FechaHoraRegistro = iif(     isNull(FechaHoraRegistro) || trim(FechaHoraRegistro) == '',     toTimestamp(null()),     iif(         instr(trim(FechaHoraRegistro), '/') > 0,         toTimestamp(trim(FechaHoraRegistro), 'dd/MM/yyyy'),         iif(             length(trim(FechaHoraRegistro)) == 10,             toTimestamp(trim(FechaHoraRegistro), 'yyyy-MM-dd'),             toTimestamp(trim(FechaHoraRegistro), 'yyyy-MM-dd HH:mm:ss')         )     ) )) ~> ConvertirFechasIncidentes",
+						"ConvertirFechasIncidentes sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          SilverId as long,",
+						"          IncidenteId as string,",
+						"          TipoIncidente as string,",
+						"          Severidad as string,",
+						"          FechaHoraInicio as timestamp,",
+						"          FechaHoraFin as timestamp,",
+						"          FechaHoraRegistro as timestamp,",
+						"          VehiculoId as string,",
+						"          Descripcion as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          IncidenteId,",
+						"          TipoIncidente,",
+						"          Severidad,",
+						"          FechaHoraInicio,",
+						"          FechaHoraFin,",
+						"          FechaHoraRegistro,",
+						"          VehiculoId,",
+						"          Descripcion",
+						"     )) ~> DestinoSilverIncidentes"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Incidentes')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Incidentes')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DF_Silver_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
@@ -4708,74 +4982,46 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_IncidenteRuta')]",
+			"name": "[concat(parameters('factoryName'), '/DS_SQL_ERP_IncidenteRuta')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_DW",
+					"referenceName": "LS_AzureSQL_ERP",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Bronze_Incidentes')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
+				"schema": [
 					{
-						"name": "EjecutarBronzeIncidentes",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Bronce_Incidentes",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"IncidentesCSV": {},
-									"IncidentesExcel2022": {},
-									"IncidentesExcel2023": {},
-									"IncidentesERP": {},
-									"DestinoBronzeIncidentes": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
+						"name": "AnioFuente",
+						"type": "smallint",
+						"precision": 5
+					},
+					{
+						"name": "IncidenteId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "EsPrincipal",
+						"type": "bit"
 					}
 				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "IncidenteRutaAzure"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Bronce_Incidentes')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_ERP')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DF_Silver_Incidentes')]",
+			"name": "[concat(parameters('factoryName'), '/DF_Bronce_IncidenteRuta')]",
 			"type": "Microsoft.DataFactory/factories/dataflows",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -4784,66 +5030,35 @@
 					"sources": [
 						{
 							"dataset": {
-								"referenceName": "DS_DW_Bronce_Incidentes",
+								"referenceName": "DS_SQL_ERP_IncidenteRuta",
 								"type": "DatasetReference"
 							},
-							"name": "IncidentesBronze"
+							"name": "IncidenteRutaERP"
 						}
 					],
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "DS_DW_Silver_Incidentes",
+								"referenceName": "DS_DW_Bronce_IncidenteRuta",
 								"type": "DatasetReference"
 							},
-							"name": "DestinoSilverIncidentes"
+							"name": "DestinoBronzeIncidenteRuta"
 						}
 					],
-					"transformations": [
-						{
-							"name": "LimpiarTextoIncidentes"
-						},
-						{
-							"name": "ConvertirFechasIncidentes"
-						}
-					],
+					"transformations": [],
 					"scriptLines": [
 						"source(output(",
-						"          AnioFuente as string,",
+						"          AnioFuente as integer,",
 						"          IncidenteId as string,",
-						"          TipoIncidente as string,",
-						"          Severidad as string,",
-						"          FechaHoraInicio as string,",
-						"          FechaHoraFin as string,",
-						"          FechaHoraRegistro as string,",
-						"          VehiculoId as string,",
-						"          Descripcion as string",
+						"          RutaHistoricaId as string,",
+						"          EsPrincipal as boolean",
 						"     ),",
-						"     allowSchemaDrift: true,",
+						"     allowSchemaDrift: false,",
 						"     validateSchema: false,",
 						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> IncidentesBronze",
-						"IncidentesBronze derive(IncidenteId = trim(IncidenteId),",
-						"          TipoIncidente = upper(trim(TipoIncidente)),",
-						"          Severidad = upper(trim(Severidad)),",
-						"          VehiculoId = trim(VehiculoId),",
-						"          Descripcion = trim(Descripcion)) ~> LimpiarTextoIncidentes",
-						"LimpiarTextoIncidentes derive(FechaHoraInicio = iif(     instr(FechaHoraInicio, '1899-12-31T') > 0,     toTimestamp(         concat(substring(FechaHoraInicio, 1, 10), ' ',                substring(FechaHoraInicio, 23, 8)),         'yyyy-MM-dd HH:mm:ss'     ),     iif(         instr(FechaHoraInicio, '/') > 0,         toTimestamp(FechaHoraInicio, 'dd/MM/yyyy HH:mm'),         iif(             length(trim(FechaHoraInicio)) == 16,             toTimestamp(FechaHoraInicio, 'yyyy-MM-dd HH:mm'),             toTimestamp(FechaHoraInicio, 'yyyy-MM-dd HH:mm:ss')         )     ) ),",
-						"          FechaHoraFin = iif(     instr(FechaHoraFin, '1899-12-31T') > 0,     toTimestamp(         concat(             substring(FechaHoraFin, 1, 10),             ' ',             substring(FechaHoraFin, 23, 8)         ),         'yyyy-MM-dd HH:mm:ss'     ),     iif(         instr(FechaHoraFin, '/') > 0,         toTimestamp(FechaHoraFin, 'dd/MM/yyyy HH:mm'),         iif(             length(trim(FechaHoraFin)) == 16,             toTimestamp(FechaHoraFin, 'yyyy-MM-dd HH:mm'),             toTimestamp(FechaHoraFin, 'yyyy-MM-dd HH:mm:ss')         )     ) ),",
-						"          FechaHoraRegistro = iif(     isNull(FechaHoraRegistro) || trim(FechaHoraRegistro) == '',     toTimestamp(null()),     iif(         instr(trim(FechaHoraRegistro), '/') > 0,         toTimestamp(trim(FechaHoraRegistro), 'dd/MM/yyyy'),         iif(             length(trim(FechaHoraRegistro)) == 10,             toTimestamp(trim(FechaHoraRegistro), 'yyyy-MM-dd'),             toTimestamp(trim(FechaHoraRegistro), 'yyyy-MM-dd HH:mm:ss')         )     ) )) ~> ConvertirFechasIncidentes",
-						"ConvertirFechasIncidentes sink(allowSchemaDrift: true,",
+						"     format: 'table') ~> IncidenteRutaERP",
+						"IncidenteRutaERP sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     input(",
-						"          SilverId as long,",
-						"          IncidenteId as string,",
-						"          TipoIncidente as string,",
-						"          Severidad as string,",
-						"          FechaHoraInicio as timestamp,",
-						"          FechaHoraFin as timestamp,",
-						"          FechaHoraRegistro as timestamp,",
-						"          VehiculoId as string,",
-						"          Descripcion as string",
-						"     ),",
 						"     deletable:false,",
 						"     insertable:true,",
 						"     updateable:false,",
@@ -4853,129 +5068,17 @@
 						"     skipDuplicateMapOutputs: true,",
 						"     errorHandlingOption: 'stopOnFirstError',",
 						"     mapColumn(",
+						"          AnioFuente,",
 						"          IncidenteId,",
-						"          TipoIncidente,",
-						"          Severidad,",
-						"          FechaHoraInicio,",
-						"          FechaHoraFin,",
-						"          FechaHoraRegistro,",
-						"          VehiculoId,",
-						"          Descripcion",
-						"     )) ~> DestinoSilverIncidentes"
+						"          RutaHistoricaId,",
+						"          EsPrincipal",
+						"     )) ~> DestinoBronzeIncidenteRuta"
 					]
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_Incidentes')]",
-				"[concat(variables('factoryId'), '/datasets/DS_DW_Silver_Incidentes')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Incidentes')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureSQL_DW",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "SilverId",
-						"type": "bigint",
-						"precision": 19
-					},
-					{
-						"name": "IncidenteId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TipoIncidente",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Severidad",
-						"type": "nvarchar"
-					},
-					{
-						"name": "FechaHoraInicio",
-						"type": "datetime2",
-						"scale": 0
-					},
-					{
-						"name": "FechaHoraFin",
-						"type": "datetime2",
-						"scale": 0
-					},
-					{
-						"name": "FechaHoraRegistro",
-						"type": "datetime2",
-						"scale": 0
-					},
-					{
-						"name": "VehiculoId",
-						"type": "nvarchar"
-					},
-					{
-						"name": "Descripcion",
-						"type": "nvarchar"
-					}
-				],
-				"typeProperties": {
-					"schema": "silver",
-					"table": "IncidentesAzure"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Pipeline_Silver_Incidentes')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "EjecutarSilverIncidentes",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "DF_Silver_Incidentes",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"IncidentesBronze": {},
-									"DestinoSilverIncidentes": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/DF_Silver_Incidentes')]"
+				"[concat(variables('factoryId'), '/datasets/DS_SQL_ERP_IncidenteRuta')]",
+				"[concat(variables('factoryId'), '/datasets/DS_DW_Bronce_IncidenteRuta')]"
 			]
 		}
 	]
