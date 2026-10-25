@@ -75,9 +75,6 @@
 				},
 				{
 					"name": "SeleccionarColumnasIncidentes"
-				},
-				{
-					"name": "PrepararRelacionesIncidentes"
 				}
 			],
 			"scriptLines": [
@@ -221,13 +218,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> SeleccionarColumnasIncidentes",
-				"UnionIncidentesERP select(mapColumn(",
-				"          IncidenteId,",
-				"          rutas_afectadas,",
-				"          AnioFuente",
-				"     ),",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> PrepararRelacionesIncidentes",
 				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
