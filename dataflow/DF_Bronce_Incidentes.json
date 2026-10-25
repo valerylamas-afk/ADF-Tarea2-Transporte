@@ -217,7 +217,7 @@
 				"PrepararFechasCSV, PrepararFechasExcel2022 union(byName: true)~> UnionIncidentes2022",
 				"UnionIncidentes2022, PrepararFechasExcel2023 union(byName: true)~> UnionIncidentes2023",
 				"UnionIncidentes2023, PrepararIncidentesERP union(byName: true)~> UnionIncidentesERP",
-				"AplanarRutas select(mapColumn(",
+				"UnionIncidentesERP select(mapColumn(",
 				"          IncidenteId,",
 				"          TipoIncidente,",
 				"          Severidad,",
