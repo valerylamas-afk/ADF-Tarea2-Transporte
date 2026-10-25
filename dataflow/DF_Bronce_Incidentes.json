@@ -55,7 +55,8 @@
 				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesCSV",
 				"PrepararIncidentesCSV derive(FechaHoraInicio = concat(trim(fecha_inicio), ' ', trim(hora_inicio)),",
 				"          FechaHoraFin = concat(trim(fecha_fin), ' ', trim(hora_fin)),",
-				"          FechaHoraRegistro = trim(fecha_registro)) ~> PrepararFechasCSV"
+				"          FechaHoraRegistro = trim(fecha_registro),",
+				"          AnioFuente = substring(trim(fecha_inicio), 7, 4)) ~> PrepararFechasCSV"
 			]
 		}
 	}
