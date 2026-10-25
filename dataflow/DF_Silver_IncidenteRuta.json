@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "ConvertirTiposIncidenteRuta"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          AnioFuente as string,",
@@ -24,7 +28,8 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> IncidenteRutaBronze"
+				"     format: 'table') ~> IncidenteRutaBronze",
+				"IncidenteRutaBronze derive(EsPrincipal = toBoolean(EsPrincipal)) ~> ConvertirTiposIncidenteRuta"
 			]
 		}
 	}
