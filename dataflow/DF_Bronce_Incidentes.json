@@ -10,6 +10,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "IncidentesCSV"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_XLS_Incidentes_2022",
+						"type": "DatasetReference"
+					},
+					"name": "IncidentesExcel2022"
 				}
 			],
 			"sinks": [],
@@ -38,6 +45,22 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> IncidentesCSV",
+				"source(output(",
+				"          id_incidente as string,",
+				"          tipo as string,",
+				"          severidad as string,",
+				"          fecha_inicio as string,",
+				"          hora_inicio as string,",
+				"          fecha_fin as string,",
+				"          hora_fin as string,",
+				"          fecha_registro as string,",
+				"          rutas_afectadas as string,",
+				"          vehiculo_afectado as string,",
+				"          descripcion as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> IncidentesExcel2022",
 				"IncidentesCSV select(mapColumn(",
 				"          IncidenteId = id_incidente,",
 				"          TipoIncidente = tipo,",
