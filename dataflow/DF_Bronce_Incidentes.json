@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "PrepararIncidentesCSV"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id_incidente as string,",
@@ -30,7 +34,22 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> IncidentesCSV"
+				"     ignoreNoFilesFound: false) ~> IncidentesCSV",
+				"IncidentesCSV select(mapColumn(",
+				"          IncidenteId = id_incidente,",
+				"          TipoIncidente = tipo,",
+				"          Severidad = severidad,",
+				"          fecha_inicio,",
+				"          hora_inicio,",
+				"          fecha_fin,",
+				"          hora_fin,",
+				"          fecha_registro,",
+				"          rutas_afectadas,",
+				"          VehiculoId = vehiculo_afectado,",
+				"          Descripcion = descripcion",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesCSV"
 			]
 		}
 	}
