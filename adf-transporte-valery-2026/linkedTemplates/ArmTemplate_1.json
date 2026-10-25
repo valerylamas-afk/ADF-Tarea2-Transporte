@@ -1128,237 +1128,64 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DF_Bronce_DemandaParadas')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"type": "MappingDataFlow",
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
+					},
+					{
+						"name": "IncidenteId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TipoIncidente",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Severidad",
+						"type": "nvarchar"
+					},
+					{
+						"name": "FechaHoraInicio",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "FechaHoraFin",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "FechaHoraRegistro",
+						"type": "datetime2",
+						"scale": 0
+					},
+					{
+						"name": "VehiculoId",
+						"type": "nvarchar"
+					},
+					{
+						"name": "Descripcion",
+						"type": "nvarchar"
+					}
+				],
 				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "DS_CSV_DemandaParadas",
-								"type": "DatasetReference"
-							},
-							"name": "DemandaCSV"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_XLS_DemandaParadas_2022",
-								"type": "DatasetReference"
-							},
-							"name": "DemandaExcel2022"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_XLS_DemandaParadas_2023",
-								"type": "DatasetReference"
-							},
-							"name": "DemandaExcel2023"
-						},
-						{
-							"dataset": {
-								"referenceName": "DS_SQL_ERP_DemandaParadas",
-								"type": "DatasetReference"
-							},
-							"name": "DemandaSQL"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "DS_DW_Bronce_DemandaParadas",
-								"type": "DatasetReference"
-							},
-							"name": "DemandaBronzeDestino"
-						}
-					],
-					"transformations": [
-						{
-							"name": "SelectDemandaCSV"
-						},
-						{
-							"name": "SelectDemandaExcel2022"
-						},
-						{
-							"name": "SelectDemandaExcel2023"
-						},
-						{
-							"name": "ConvertirTiposDemandaSQL"
-						},
-						{
-							"name": "SelectDemandaSQL"
-						},
-						{
-							"name": "UnionDemandaExcel"
-						},
-						{
-							"name": "UnionDemandaCSVExcel"
-						},
-						{
-							"name": "UnionBronceDemanda"
-						}
-					],
-					"scriptLines": [
-						"source(output(",
-						"          fec_servicio as string,",
-						"          cod_ruta as string,",
-						"          nro_parada as string,",
-						"          franja as string,",
-						"          abordajes_manuales as string,",
-						"          descensos_manuales as string,",
-						"          demanda_no_atendida as string,",
-						"          medicion as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> DemandaCSV",
-						"source(output(",
-						"          fecha_servicio as string,",
-						"          cod_ruta as string,",
-						"          nro_parada as string,",
-						"          franja as string,",
-						"          estimacion_abordajes as string,",
-						"          estimacion_descensos as string,",
-						"          demanda_no_atendida as string,",
-						"          metodo as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> DemandaExcel2022",
-						"source(output(",
-						"          fecha_servicio as string,",
-						"          cod_ruta as string,",
-						"          nro_parada as string,",
-						"          franja as string,",
-						"          estimacion_abordajes as string,",
-						"          estimacion_descensos as string,",
-						"          demanda_no_atendida as string,",
-						"          metodo as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> DemandaExcel2023",
-						"source(output(",
-						"          AnioFuente as integer,",
-						"          DemandaId as string,",
-						"          FechaServicio as date,",
-						"          RutaHistoricaId as string,",
-						"          ParadaHistoricaId as string,",
-						"          Franja as string,",
-						"          ValidacionesTarjeta as integer,",
-						"          Descensos as integer,",
-						"          DemandaNoAtendida as integer,",
-						"          Metodo as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     isolationLevel: 'READ_UNCOMMITTED',",
-						"     format: 'table') ~> DemandaSQL",
-						"DemandaCSV select(mapColumn(",
-						"          FechaServicio = fec_servicio,",
-						"          RutaHistoricaId = cod_ruta,",
-						"          ParadaHistoricaId = nro_parada,",
-						"          Franja = franja,",
-						"          abordajes_manuales,",
-						"          Descensos = descensos_manuales,",
-						"          DemandaNoAtendida = demanda_no_atendida,",
-						"          Metodo = medicion",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectDemandaCSV",
-						"DemandaExcel2022 select(mapColumn(",
-						"          FechaServicio = fecha_servicio,",
-						"          RutaHistoricaId = cod_ruta,",
-						"          ParadaHistoricaId = nro_parada,",
-						"          Franja = franja,",
-						"          estimacion_abordajes,",
-						"          Descensos = estimacion_descensos,",
-						"          DemandaNoAtendida = demanda_no_atendida,",
-						"          Metodo = metodo",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectDemandaExcel2022",
-						"DemandaExcel2023 select(mapColumn(",
-						"          FechaServicio = fecha_servicio,",
-						"          RutaHistoricaId = cod_ruta,",
-						"          ParadaHistoricaId = nro_parada,",
-						"          Franja = franja,",
-						"          estimacion_abordajes,",
-						"          Descensos = estimacion_descensos,",
-						"          DemandaNoAtendida = demanda_no_atendida,",
-						"          Metodo = metodo",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectDemandaExcel2023",
-						"DemandaSQL derive(AnioFuente = toString(AnioFuente),",
-						"          FechaServicio = toString(FechaServicio),",
-						"          ValidacionesTarjeta = toString(ValidacionesTarjeta),",
-						"          Descensos = toString(Descensos),",
-						"          DemandaNoAtendida = toString(DemandaNoAtendida)) ~> ConvertirTiposDemandaSQL",
-						"ConvertirTiposDemandaSQL select(mapColumn(",
-						"          AnioFuente,",
-						"          DemandaId,",
-						"          FechaServicio,",
-						"          RutaHistoricaId,",
-						"          ParadaHistoricaId,",
-						"          Franja,",
-						"          ValidacionesTarjeta,",
-						"          Descensos,",
-						"          DemandaNoAtendida,",
-						"          Metodo",
-						"     ),",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> SelectDemandaSQL",
-						"SelectDemandaExcel2022, SelectDemandaExcel2023 union(byName: true)~> UnionDemandaExcel",
-						"UnionDemandaExcel, SelectDemandaCSV union(byName: true)~> UnionDemandaCSVExcel",
-						"UnionDemandaCSVExcel, SelectDemandaSQL union(byName: true)~> UnionBronceDemanda",
-						"UnionBronceDemanda sink(allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     input(",
-						"          AnioFuente as string,",
-						"          DemandaId as string,",
-						"          FechaServicio as string,",
-						"          RutaHistoricaId as string,",
-						"          ParadaHistoricaId as string,",
-						"          Franja as string,",
-						"          ValidacionesTarjeta as string,",
-						"          Descensos as string,",
-						"          DemandaNoAtendida as string,",
-						"          Metodo as string,",
-						"          abordajes_manuales as string,",
-						"          estimacion_abordajes as string",
-						"     ),",
-						"     deletable:false,",
-						"     insertable:true,",
-						"     updateable:false,",
-						"     upsertable:false,",
-						"     format: 'table',",
-						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError',",
-						"     mapColumn(",
-						"          AnioFuente,",
-						"          DemandaId,",
-						"          FechaServicio,",
-						"          RutaHistoricaId,",
-						"          ParadaHistoricaId,",
-						"          Franja,",
-						"          ValidacionesTarjeta,",
-						"          Descensos,",
-						"          DemandaNoAtendida,",
-						"          Metodo,",
-						"          abordajes_manuales,",
-						"          estimacion_abordajes",
-						"     )) ~> DemandaBronzeDestino"
-					]
+					"schema": "silver",
+					"table": "IncidentesAzure"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_XLS_DemandaParadas_2022')]",
-				"[concat(variables('factoryId'), '/datasets/DS_XLS_DemandaParadas_2023')]",
-				"[concat(variables('factoryId'), '/datasets/DS_SQL_ERP_DemandaParadas')]"
-			]
+			"dependsOn": []
 		}
 	]
 }
