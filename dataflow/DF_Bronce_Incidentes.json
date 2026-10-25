@@ -81,9 +81,6 @@
 				},
 				{
 					"name": "FiltrarRutasAfectadas"
-				},
-				{
-					"name": "SepararRutas"
 				}
 			],
 			"scriptLines": [
@@ -235,7 +232,6 @@
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> PrepararRelacionesIncidentes",
 				"PrepararRelacionesIncidentes filter(!isNull(rutas_afectadas) && trim(rutas_afectadas) != '') ~> FiltrarRutasAfectadas",
-				"FiltrarRutasAfectadas derive(ListaRutas = split(trim(rutas_afectadas), '|')) ~> SepararRutas",
 				"SeleccionarColumnasIncidentes sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
