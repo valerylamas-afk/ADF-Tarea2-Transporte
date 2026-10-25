@@ -13,7 +13,11 @@
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "LimpiarTextoIncidentes"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          AnioFuente as string,",
@@ -29,7 +33,12 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> IncidentesBronze"
+				"     format: 'table') ~> IncidentesBronze",
+				"IncidentesBronze derive(IncidenteId = trim(IncidenteId),",
+				"          TipoIncidente = upper(trim(TipoIncidente)),",
+				"          Severidad = upper(trim(Severidad)),",
+				"          VehiculoId = trim(VehiculoId),",
+				"          Descripcion = trim(Descripcion)) ~> LimpiarTextoIncidentes"
 			]
 		}
 	}
