@@ -42,6 +42,9 @@
 				},
 				{
 					"name": "PrepararIncidentesExcel2023"
+				},
+				{
+					"name": "PrepararFechasExcel2023"
 				}
 			],
 			"scriptLines": [
@@ -145,7 +148,11 @@
 				"          Descripcion = descripcion",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesExcel2023"
+				"     skipDuplicateMapOutputs: true) ~> PrepararIncidentesExcel2023",
+				"PrepararIncidentesExcel2023 derive(FechaHoraInicio = concat(trim(fecha_inicio), ' ', trim(hora_inicio)),",
+				"          FechaHoraFin = concat(trim(fecha_fin), ' ', trim(hora_fin)),",
+				"          FechaHoraRegistro = trim(fecha_registro),",
+				"          AnioFuente = '2023') ~> PrepararFechasExcel2023"
 			]
 		}
 	}
