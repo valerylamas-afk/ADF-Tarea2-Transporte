@@ -12,7 +12,15 @@
 					"name": "IncidenteRutaERP"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_DW_Bronce_IncidenteRuta",
+						"type": "DatasetReference"
+					},
+					"name": "DestinoBronzeIncidenteRuta"
+				}
+			],
 			"transformations": [],
 			"scriptLines": [
 				"source(output(",
@@ -24,7 +32,23 @@
 				"     allowSchemaDrift: false,",
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> IncidenteRutaERP"
+				"     format: 'table') ~> IncidenteRutaERP",
+				"IncidenteRutaERP sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          AnioFuente,",
+				"          IncidenteId,",
+				"          RutaHistoricaId,",
+				"          EsPrincipal",
+				"     )) ~> DestinoBronzeIncidenteRuta"
 			]
 		}
 	}
