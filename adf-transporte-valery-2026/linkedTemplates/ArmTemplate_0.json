@@ -168,6 +168,80 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/DS_CSV_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureBlobStorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "incidentes.csv",
+						"folderPath": "datos_csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id_incidente",
+						"type": "String"
+					},
+					{
+						"name": "tipo",
+						"type": "String"
+					},
+					{
+						"name": "severidad",
+						"type": "String"
+					},
+					{
+						"name": "fecha_inicio",
+						"type": "String"
+					},
+					{
+						"name": "hora_inicio",
+						"type": "String"
+					},
+					{
+						"name": "fecha_fin",
+						"type": "String"
+					},
+					{
+						"name": "hora_fin",
+						"type": "String"
+					},
+					{
+						"name": "fecha_registro",
+						"type": "String"
+					},
+					{
+						"name": "rutas_afectadas",
+						"type": "String"
+					},
+					{
+						"name": "vehiculo_afectado",
+						"type": "String"
+					},
+					{
+						"name": "descripcion",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/DS_CSV_Paradas')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -483,6 +557,64 @@
 				"typeProperties": {
 					"schema": "bronze",
 					"table": "DemandaParadasAzure"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Bronce_Incidentes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_AzureSQL_DW",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "AnioFuente",
+						"type": "varchar"
+					},
+					{
+						"name": "IncidenteId",
+						"type": "varchar"
+					},
+					{
+						"name": "TipoIncidente",
+						"type": "varchar"
+					},
+					{
+						"name": "Severidad",
+						"type": "varchar"
+					},
+					{
+						"name": "FechaHoraInicio",
+						"type": "varchar"
+					},
+					{
+						"name": "FechaHoraFin",
+						"type": "varchar"
+					},
+					{
+						"name": "FechaHoraRegistro",
+						"type": "varchar"
+					},
+					{
+						"name": "VehiculoId",
+						"type": "varchar"
+					},
+					{
+						"name": "Descripcion",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "bronze",
+					"table": "IncidentesAzure"
 				}
 			},
 			"dependsOn": [
@@ -940,207 +1072,76 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Operacion2022')]",
+			"name": "[concat(parameters('factoryName'), '/DS_DW_Silver_Viajes')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
+					"referenceName": "LS_AzureSQL_DW",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Viajes",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
+				"type": "AzureSqlTable",
 				"schema": [
 					{
-						"name": "id_viaje",
-						"type": "String"
+						"name": "SilverId",
+						"type": "bigint",
+						"precision": 19
 					},
 					{
-						"name": "cod_ruta",
-						"type": "String"
+						"name": "ViajeId",
+						"type": "nvarchar"
 					},
 					{
-						"name": "nro_bus",
-						"type": "String"
+						"name": "RutaHistoricaId",
+						"type": "nvarchar"
 					},
 					{
-						"name": "fecha_servicio",
-						"type": "String"
+						"name": "VehiculoId",
+						"type": "nvarchar"
 					},
 					{
-						"name": "hora_programada",
-						"type": "String"
+						"name": "FechaServicio",
+						"type": "date"
 					},
 					{
-						"name": "hora_salida",
-						"type": "String"
+						"name": "HoraProgramada",
+						"type": "time",
+						"scale": 7
 					},
 					{
-						"name": "hora_llegada",
-						"type": "String"
+						"name": "HoraSalida",
+						"type": "time",
+						"scale": 7
 					},
 					{
-						"name": "pasajeros_estimados",
-						"type": "String"
+						"name": "HoraLlegada",
+						"type": "time",
+						"scale": 7
 					},
 					{
-						"name": "km_recorridos",
-						"type": "String"
+						"name": "ValidacionesTarjeta",
+						"type": "int",
+						"precision": 10
 					},
 					{
-						"name": "estado_viaje",
-						"type": "String"
+						"name": "KmRecorridos",
+						"type": "decimal",
+						"precision": 8,
+						"scale": 1
 					},
 					{
-						"name": "tipo_metrica",
-						"type": "String"
+						"name": "EstadoViaje",
+						"type": "nvarchar"
 					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Operacion2023')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
+				],
 				"typeProperties": {
-					"sheetName": "Viajes",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2023.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "id_viaje",
-						"type": "String"
-					},
-					{
-						"name": "cod_ruta",
-						"type": "String"
-					},
-					{
-						"name": "nro_bus",
-						"type": "String"
-					},
-					{
-						"name": "fecha_servicio",
-						"type": "String"
-					},
-					{
-						"name": "hora_programada",
-						"type": "String"
-					},
-					{
-						"name": "hora_salida",
-						"type": "String"
-					},
-					{
-						"name": "hora_llegada",
-						"type": "String"
-					},
-					{
-						"name": "pasajeros_estimados",
-						"type": "String"
-					},
-					{
-						"name": "km_recorridos",
-						"type": "String"
-					},
-					{
-						"name": "estado_viaje",
-						"type": "String"
-					},
-					{
-						"name": "tipo_metrica",
-						"type": "String"
-					}
-				]
+					"schema": "silver",
+					"table": "ViajesAzure"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DS_Excel_Paradas2022')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_AzureBlobStorage",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "Excel",
-				"typeProperties": {
-					"sheetName": "Paradas",
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"fileName": "operacion_2022.xlsx",
-						"folderPath": "datos_xls",
-						"container": "raw"
-					},
-					"firstRowAsHeader": true
-				},
-				"schema": [
-					{
-						"name": "nro_parada",
-						"type": "String"
-					},
-					{
-						"name": "nombre_parada",
-						"type": "String"
-					},
-					{
-						"name": "zona",
-						"type": "String"
-					},
-					{
-						"name": "latitud",
-						"type": "String"
-					},
-					{
-						"name": "longitud",
-						"type": "String"
-					},
-					{
-						"name": "fecha_desde",
-						"type": "String"
-					},
-					{
-						"name": "fecha_hasta",
-						"type": "String"
-					},
-					{
-						"name": "estado",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_AzureBlobStorage')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureSQL_DW')]"
 			]
 		}
 	]
