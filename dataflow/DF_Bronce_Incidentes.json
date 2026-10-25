@@ -52,6 +52,9 @@
 				},
 				{
 					"name": "PrepararFechasExcel2023"
+				},
+				{
+					"name": "PrepararIncidentesERP"
 				}
 			],
 			"scriptLines": [
@@ -174,7 +177,11 @@
 				"PrepararIncidentesExcel2023 derive(FechaHoraInicio = concat(trim(fecha_inicio), ' ', trim(hora_inicio)),",
 				"          FechaHoraFin = concat(trim(fecha_fin), ' ', trim(hora_fin)),",
 				"          FechaHoraRegistro = trim(fecha_registro),",
-				"          AnioFuente = '2023') ~> PrepararFechasExcel2023"
+				"          AnioFuente = '2023') ~> PrepararFechasExcel2023",
+				"IncidentesERP derive(AnioFuente = toString(AnioFuente),",
+				"          FechaHoraInicio = toString(FechaHoraInicio, 'yyyy-MM-dd HH:mm:ss'),",
+				"          FechaHoraFin = toString(FechaHoraFin, 'yyyy-MM-dd HH:mm:ss'),",
+				"          FechaHoraRegistro = toString(FechaHoraRegistro, 'yyyy-MM-dd HH:mm:ss')) ~> PrepararIncidentesERP"
 			]
 		}
 	}
